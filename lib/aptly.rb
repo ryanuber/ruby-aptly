@@ -28,8 +28,6 @@ module Aptly
     end
   end
 
-  private :runcmd
-
   def parse_list lines
     items = Array.new
     lines.each do |line|
@@ -40,8 +38,6 @@ module Aptly
     end
     items
   end
-
-  private :parse_list
 
   def parse_info lines
     items = Hash.new
@@ -59,8 +55,6 @@ module Aptly
 
     items
   end
-
-  private :parse_info
 
   def list_snapshots
     out, err, status = runcmd 'aptly snapshot list'
