@@ -6,7 +6,6 @@ require 'aptly/mirror'
 require 'aptly/repo'
 
 module Aptly
-  extend self
 
   def runcmd cmd
     Mutex.lock!

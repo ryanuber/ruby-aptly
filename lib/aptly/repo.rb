@@ -26,8 +26,6 @@ module Aptly
     cmd += ' -dep-follow-suggests' if dsuggests
     cmd += " #{name}"
 
-  puts cmd
-
     _, err, status = runcmd cmd
     raise AptlyError.new('Failed to create repo', err) if status != 0
 

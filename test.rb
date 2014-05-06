@@ -13,5 +13,5 @@ require 'aptly'
 #Aptly::update_mirrors
 #repo = Aptly::Repo.new "test2"
 #repo.drop!
-repo = Aptly::create_repo "test2", comment: "Cool repo, bro"
-p repo.inspect
+repo = Aptly.create_repo "test2", comment: "Cool repo, bro"
+repo.drop!
