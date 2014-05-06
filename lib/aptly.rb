@@ -3,6 +3,7 @@ require 'open3'
 require 'aptly/mutex'
 require 'aptly/error'
 require 'aptly/mirror'
+require 'aptly/repo'
 
 module Aptly
   extend self
@@ -64,12 +65,6 @@ module Aptly
   def list_snapshots
     out, err, status = runcmd 'aptly snapshot list'
     raise AptlyError.new('Failed to list snapshots', out, err) if status != 0
-    parse_list out.lines
-  end
-
-  def list_repos
-    out, err, status = runcmd 'aptly repo list'
-    raise AptlyError.new('Failed to list repos', out, err) if status != 0
     parse_list out.lines
   end
 
