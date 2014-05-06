@@ -17,7 +17,26 @@ end
 module Aptly
   extend self
 
+  class Mutex
+    @@mutex_path = '/tmp/aptly.lock'
+
+    def self.lock!
+      sleep 1 until !self.locked?
+      File.open(@@mutex_path, 'w'){}
+    end
+
+    def self.locked?
+      File.exist? @@mutex_path
+    end
+
+    def self.unlock!
+      File.delete @@mutex_path if self.locked?
+    end
+  end
+
   def runcmd cmd
+    Mutex.lock!
+
     Open3.popen3(cmd) do |_, stdout, stderr, thread|
       res = thread.value.exitstatus
       out = stdout.read
@@ -27,6 +46,8 @@ module Aptly
       # report informational messages to stderr. This needs to be fixed in the
       # upstream code but for now we can work around it.
       res = 1 if (res != 0 && err != '')
+
+      Mutex.unlock!
 
       return out, err, res
     end
@@ -149,7 +170,13 @@ module Aptly
       if status != 0
         raise AptlyError.new("Failed to drop mirror '#{@name}'", out, err)
       end
-      return true
+    end
+
+    def update!
+      out, err, status = Aptly::runcmd "aptly mirror update #{@name}"
+      if status != 0
+        raise AptlyError.new("Failed to update mirror '#{@name}'", out, err)
+      end
     end
   end
 end
