@@ -125,6 +125,13 @@ module Aptly
     parse_info out.lines
   end
 
+  def update_mirrors
+    for name in list_mirrors
+      mirror = Aptly::Mirror.new name
+      mirror.update!
+    end
+  end
+
   def create_mirror(
     name,
     baseurl,

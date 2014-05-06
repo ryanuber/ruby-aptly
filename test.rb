@@ -7,5 +7,6 @@ require './aptly.rb'
 #p Aptly::mirror_info "oneiric"
 #mirror = Aptly::Mirror.new "oneiric"
 #mirror = Aptly::create_mirror "puppetlabs-deps", "http://apt.puppetlabs.com", dist: 'precise'
-mirror = Aptly::Mirror.new "puppetlabs-deps"
-mirror.update!
+#mirror = Aptly::Mirror.new "puppetlabs-deps"
+#mirror.update!
+Aptly::update_mirrors
