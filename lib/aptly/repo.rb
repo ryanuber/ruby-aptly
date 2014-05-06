@@ -16,13 +16,17 @@ module Aptly
       raise AptlyError.new("Repo '#{name}' already exists")
     end
 
-    cmd = "aptly repo create #{name}"
+    cmd = "aptly repo create"
+    cmd += " -comment '#{comment.gsub("'", '')}'" if !comment.empty?
     cmd += " -distribution #{dist}" if !dist.empty?
     cmd += " -architectures #{archlist.join(',')}" if !archlist.empty?
     cmd += ' -dep-follow-all-variants' if dall
     cmd += ' -dep-follow-recommends' if drecommends
     cmd += ' -dep-follow-source' if dsource
     cmd += ' -dep-follow-suggests' if dsuggests
+    cmd += " #{name}"
+
+  puts cmd
 
     _, err, status = runcmd cmd
     raise AptlyError.new('Failed to create repo', err) if status != 0
