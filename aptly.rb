@@ -3,24 +3,41 @@
 module Aptly
   extend self
 
-  def exec cmd
+  class AptlyException < Exception
+  end
+
+  def runcmd cmd
     out = %x(#{cmd})
     return out, $?.exitstatus
   end
 
-  def list_mirrors
-    mirrors = Array.new
-    out, status = exec "aptly mirror list"
-    raise AptlyException "Failed to list mirrors" if status != 0
-
-    out.lines.each do |line|
+  def parse_list lines
+    items = Array.new
+    lines.each do |line|
       if line.start_with?(" * ")
         parts = line.split(/\[|\]/)
-        mirrors << parts[1] if parts.length == 3
+        items << parts[1] if parts.length == 3
       end
     end
+    items
+  end
 
-    mirrors
+  def list_mirrors
+    out, status = runcmd "aptly mirror list"
+    raise AptlyException.new "Failed to list mirrors" if status != 0
+    parse_list out.lines
+  end
+
+  def list_snapshots
+    out, status = runcmd "aptly snapshot list"
+    raise AptlyException.new "Failed to list snapshots" if status != 0
+    parse_list out.lines
+  end
+
+  def list_repos
+    out, status = runcmd "aptly repo list"
+    raise AptlyException.new "Failed to list repos" if status != 0
+    parse_list out.lines
   end
 
 end
