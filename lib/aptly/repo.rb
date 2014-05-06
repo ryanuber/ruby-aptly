@@ -67,7 +67,7 @@ module Aptly
       @num_packages = info['Number of packages'].to_i
     end
 
-    def drop!
+    def drop
       out, err, status = Aptly::runcmd "aptly repo drop #{@name}"
       if status != 0
         raise AptlyError.new("Failed to drop repo '#{@name}'", out, err)

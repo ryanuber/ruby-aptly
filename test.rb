@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#/usr/bin/ruby
 
 require 'aptly'
 
@@ -9,10 +9,10 @@ require 'aptly'
 #mirror = Aptly::Mirror.new "oneiric"
 #mirror = Aptly::create_mirror "puppetlabs-deps", "http://apt.puppetlabs.com", dist: 'precise'
 #mirror = Aptly::Mirror.new "puppetlabs-deps"
-#mirror.update!
+#mirror.update
 #Aptly::update_mirrors
 #repo = Aptly.create_repo "test2", comment: "Cool repo, bro"
 repo = Aptly::Repo.new "test2"
 puts repo.inspect
 #repo.add "/Users/ryanuber/Downloads/"
-#repo.drop!
+#repo.drop

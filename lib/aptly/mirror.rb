@@ -80,14 +80,14 @@ module Aptly
       @archlist = info['Architectures']
     end
 
-    def drop!
+    def drop
       out, err, status = Aptly::runcmd "aptly mirror drop #{@name}"
       if status != 0
         raise AptlyError.new("Failed to drop mirror '#{@name}'", out, err)
       end
     end
 
-    def update!
+    def update
       out, err, status = Aptly::runcmd "aptly mirror update #{@name}"
       if status != 0
         raise AptlyError.new("Failed to update mirror '#{@name}'", out, err)
