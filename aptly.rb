@@ -84,12 +84,17 @@ module Aptly
     @name = nil
     @baseurl = nil
     @dist = nil
-    @repos = []
+    @components = []
     @archlist = []
-    @keyrings = []
 
     def initialize name
       if Aptly::list_mirrors.include? name
+        info = Aptly::mirror_info name
+        @name = info['Name']
+        @baseurl = info['Archive Root URL']
+        @dist = info['Distribution']
+        @components = info['Components']
+        @archlist = info['Architectures']
       end
     end
 
