@@ -36,6 +36,7 @@ module Aptly
 
   def runcmd cmd
     Mutex.lock!
+    at_exit { Mutex.unlock! }
 
     Open3.popen3(cmd) do |_, stdout, stderr, thread|
       res = thread.value.exitstatus
