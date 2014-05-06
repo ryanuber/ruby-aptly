@@ -58,19 +58,19 @@ module Aptly
 
   def list_mirrors
     out, err, status = runcmd 'aptly mirror list'
-    raise AptlyError.new "Failed to list mirrors: #{err}" if status != 0
+    raise AptlyError.new('Failed to list mirrors', err) if status != 0
     parse_list out.lines
   end
 
   def list_snapshots
     out, err, status = runcmd 'aptly snapshot list'
-    raise AptlyError.new "Failed to list snapshots: #{err}" if status != 0
+    raise AptlyError.new('Failed to list snapshots', err) if status != 0
     parse_list out.lines
   end
 
   def list_repos
     out, err, status = runcmd 'aptly repo list'
-    raise AptlyError.new "Failed to list repos: #{err}" if status != 0
+    raise AptlyError.new('Failed to list repos', err) if status != 0
     parse_list out.lines
   end
 
