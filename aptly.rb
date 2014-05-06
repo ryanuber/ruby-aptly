@@ -78,6 +78,8 @@ module Aptly
     items
   end
 
+  private :parse_list
+
   def parse_info lines
     items = Hash.new
     lines.reject{|l| l.empty?}.each do |line|
@@ -94,6 +96,8 @@ module Aptly
 
     items
   end
+
+  private :parse_info
 
   def list_mirrors
     out, err, status = runcmd 'aptly mirror list'
