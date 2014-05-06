@@ -64,13 +64,20 @@ module Aptly
       @comment = info['Comment']
       @dist = info['Default Distribution']
       @component = info['Default Component']
-      @num_packages = info['Number of packages']
+      @num_packages = info['Number of packages'].to_i
     end
 
     def drop!
       out, err, status = Aptly::runcmd "aptly repo drop #{@name}"
       if status != 0
         raise AptlyError.new("Failed to drop repo '#{@name}'", out, err)
+      end
+    end
+
+    def add path
+      out, err, status = Aptly::runcmd "aptly repo add #{@name} #{path}"
+      if status != 0
+        raise AptlyError.new("Failed to add to repo: #{@path}", out, err)
       end
     end
   end

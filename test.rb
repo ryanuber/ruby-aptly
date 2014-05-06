@@ -11,7 +11,8 @@ require 'aptly'
 #mirror = Aptly::Mirror.new "puppetlabs-deps"
 #mirror.update!
 #Aptly::update_mirrors
-#repo = Aptly::Repo.new "test2"
+#repo = Aptly.create_repo "test2", comment: "Cool repo, bro"
+repo = Aptly::Repo.new "test2"
+puts repo.inspect
+#repo.add "/Users/ryanuber/Downloads/"
 #repo.drop!
-repo = Aptly.create_repo "test2", comment: "Cool repo, bro"
-repo.drop!
