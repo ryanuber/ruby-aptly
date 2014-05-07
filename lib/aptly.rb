@@ -4,6 +4,7 @@ require 'aptly/mutex'
 require 'aptly/error'
 require 'aptly/mirror'
 require 'aptly/repo'
+require 'aptly/snapshot'
 require 'aptly/string'
 
 module Aptly
@@ -36,7 +37,7 @@ module Aptly
     items = Array.new
     lines.each do |line|
       if line.start_with?(' * ')
-        parts = line.split(/\[|\]/)
+        parts = line.split(/\[|\]/, 3)
         items << parts[1] if parts.length == 3
       end
     end

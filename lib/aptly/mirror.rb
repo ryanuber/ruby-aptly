@@ -47,6 +47,8 @@ module Aptly
   end
 
   class Mirror
+    attr_accessor :name, :baseurl, :dist, :components, :archlist
+
     @name = ''
     @baseurl = ''
     @dist = ''
@@ -68,11 +70,6 @@ module Aptly
 
     def drop
       Aptly::runcmd "aptly mirror drop #{@name.to_safe}"
-      if status != 0
-        raise AptlyError.new(
-          "Failed to drop mirror '#{@name.to_safe}'", out, err
-        )
-      end
     end
 
     def update ignore_cksum: false, ignore_sigs: false
