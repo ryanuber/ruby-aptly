@@ -1,6 +1,28 @@
 module Aptly
   extend self
 
+  # Creates a new mirror in aptly. This simply creates the necessary records in
+  # leveldb and doesn't do any heavy lifting.
+  #
+  # == Parameters:
+  # name::
+  #   The name of the new repository
+  # baseurl::
+  #   The URL to the repository content
+  # dist::
+  #   The distribution (e.g. precise, quantal)
+  # components::
+  #   The repository components (e.g. main, stable)
+  # archlist::
+  #   A list of architecture types to mirror
+  # ignoresigs::
+  #   Ignore package signature mismatches
+  # source::
+  #   Optionally mirror in source packages
+  #
+  # == Returns:
+  # An Aptly::Mirror object
+  #
   def create_mirror(
     name,
     baseurl,
@@ -29,16 +51,31 @@ module Aptly
     return Mirror.new name
   end
 
+  # Returns a list of existing mirrors in aptly
+  #
+  # == Returns
+  # An array of mirror names
+  #
   def list_mirrors
     out = runcmd 'aptly mirror list'
     parse_list out.lines
   end
 
+  # Retrieves information about a mirror
+  #
+  # == Parameters:
+  # name::
+  #   The name of the mirror to retrieve info for
+  #
+  # == Returns:
+  # A hash of mirror information
+  #
   def mirror_info name
     out = runcmd "aptly mirror show #{name.to_safe}"
     parse_info out.lines
   end
 
+  # Iterates over all repositories in aptly and calls an update on each.
   def update_mirrors
     for name in list_mirrors
       mirror = Aptly::Mirror.new name
@@ -55,6 +92,12 @@ module Aptly
     @components = []
     @archlist = []
 
+    # Instantiates a new Mirror object
+    #
+    # == Parameters:
+    # name::
+    #   Then name associated with the mirror
+    #
     def initialize name
       if !Aptly::list_mirrors.include? name
         raise AptlyError.new("Mirror '#{name}' does not exist")
@@ -68,10 +111,20 @@ module Aptly
       @archlist = info['Architectures']
     end
 
+    # Drops an existing mirror from aptly's configuration
     def drop
       Aptly::runcmd "aptly mirror drop #{@name.to_safe}"
     end
 
+    # Updates a repository, syncing in all packages which have not already been
+    # downloaded and caches them locally.
+    #
+    # == Parameters:
+    # ignore_cksum::
+    #   Ignore checksum mismatches
+    # ignore_sigs::
+    #   Ignore author signature mismatches
+    #
     def update ignore_cksum: false, ignore_sigs: false
       cmd = 'aptly mirror update'
       cmd += ' -ignore-checksums' if ignore_cksums
