@@ -9,6 +9,17 @@ require 'aptly/string'
 
 module Aptly
 
+  # runcmd handles running arbitrary commands. It is intended to run aptly-
+  # specific commands, and as such, it uses a mutex to take gurantee
+  # consistency and avoid multiple processes modifying aptly simultaneously.
+  #
+  # == Parameters:
+  # cmd::
+  #   A string holding the command to run
+  #
+  # == Returns:
+  # The content of stdout
+  #
   def runcmd cmd
     Mutex.lock!
     at_exit { Mutex.unlock! }
@@ -33,6 +44,15 @@ module Aptly
     end
   end
 
+  # Parses the output lines of aptly listing commands
+  #
+  # == Parameters:
+  # lines::
+  #   An array of lines of string output from aptly list commands
+  #
+  # == Returns:
+  # An array of items
+  #
   def parse_list lines
     items = Array.new
     lines.each do |line|
@@ -44,6 +64,15 @@ module Aptly
     items
   end
 
+  # Parses the output of aptly show commands.
+  #
+  # == Parameters:
+  # lines::
+  #   An array of strings of aptly output
+  #
+  # == Returns:
+  # A hash of information
+  #
   def parse_info lines
     items = Hash.new
     lines.reject{|l| l.empty?}.each do |line|
@@ -59,11 +88,6 @@ module Aptly
     multi items, 'Architectures'
 
     items
-  end
-
-  def list_snapshots
-    out = runcmd 'aptly snapshot list'
-    parse_list out.lines
   end
 
 end
