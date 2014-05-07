@@ -18,7 +18,7 @@ module Aptly
       raise AptlyError.new "1 or more components are required"
     end
 
-    cmd = "aptly mirror create"
+    cmd = 'aptly mirror create'
     cmd += " -architectures #{archlist.join(',')}" if !archlist.empty?
     cmd += ' -ignore-signatures' if ignoresigs
     cmd += ' -with-sources' if source
@@ -75,8 +75,12 @@ module Aptly
       end
     end
 
-    def update
-      Aptly::runcmd "aptly mirror update #{@name.to_safe}"
+    def update ignore_cksum: false, ignore_sigs: false
+      cmd = 'aptly mirror update'
+      cmd += ' -ignore-checksums' if ignore_cksums
+      cmd += ' -ignore-signatures' if ignore_sigs
+      cmd += " #{@name.to_safe}"
+      Aptly::runcmd cmd
     end
   end
 end
