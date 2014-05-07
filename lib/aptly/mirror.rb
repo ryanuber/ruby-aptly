@@ -4,14 +4,9 @@ module Aptly
   def create_mirror(
     name,
     baseurl,
-    dist: '',
-    repos: [],
+    dist,
+    components: [],
     archlist: [],
-    keyrings: [],
-    dall: false,
-    drecommends: false,
-    dsource: false,
-    dsuggests: false,
     ignoresigs: false,
     source: false
   )
@@ -19,19 +14,19 @@ module Aptly
       raise AptlyError.new("Mirror '#{name}' already exists")
     end
 
-    cmd = "aptly mirror create #{name} #{baseurl}"
-    cmd += " #{dist}" if !dist.empty?
-    cmd += " #{repos.join(',')}" if !repos.empty?
+    if components.length < 1
+      raise AptlyError.new("1 or more components are required")
+    end
+
+    cmd = "aptly mirror create #{name.to_safe} #{baseurl.to_safe}"
+    cmd += " #{dist.to_safe}" if !dist.empty?
+    cmd += " #{components.join(' ')}"
     cmd += " -architectures #{archlist.join(',')}" if !archlist.empty?
     cmd += ' -dep-follow-all-variants' if dall
     cmd += ' -dep-follow-recommends' if drecommends
     cmd += ' -dep-follow-source' if dsource
     cmd += ' -dep-follow-suggests' if dsuggests
     cmd += ' -ignore-signatures' if ignoresigs
-
-    if !keyrings.empty?
-      keyrings.each {|keyring| cmd += " -keyring #{keyring}"}
-    end
 
     _, err, status = runcmd cmd
     raise AptlyError.new('Failed to create mirror', err) if status != 0
@@ -46,7 +41,7 @@ module Aptly
   end
 
   def mirror_info name
-    out, err, status = runcmd "aptly mirror show #{name}"
+    out, err, status = runcmd "aptly mirror show #{name.to_safe}"
     if status != 0
       raise AptlyError.new("Failed to fetch mirror details", out, err)
     end
@@ -61,9 +56,9 @@ module Aptly
   end
 
   class Mirror
-    @name = nil
-    @baseurl = nil
-    @dist = nil
+    @name = ''
+    @baseurl = ''
+    @dist = ''
     @components = []
     @archlist = []
 
@@ -81,16 +76,20 @@ module Aptly
     end
 
     def drop
-      out, err, status = Aptly::runcmd "aptly mirror drop #{@name}"
+      out, err, status = Aptly::runcmd "aptly mirror drop #{@name.to_safe}"
       if status != 0
-        raise AptlyError.new("Failed to drop mirror '#{@name}'", out, err)
+        raise AptlyError.new(
+          "Failed to drop mirror '#{@name.to_safe}'", out, err
+        )
       end
     end
 
     def update
-      out, err, status = Aptly::runcmd "aptly mirror update #{@name}"
+      out, err, status = Aptly::runcmd "aptly mirror update #{@name.to_safe}"
       if status != 0
-        raise AptlyError.new("Failed to update mirror '#{@name}'", out, err)
+        raise AptlyError.new(
+          "Failed to update mirror '#{@name.to_safe}'", out, err
+        )
       end
     end
   end

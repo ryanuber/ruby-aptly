@@ -15,5 +15,5 @@ require 'aptly'
 repo = Aptly::Repo.new "test2"
 repo.comment = "some other comment, dude!"
 repo.save
-#repo.add "/Users/ryanuber/Downloads/"
+repo.add "/Users/ryanuber/Downloads/"
 #repo.drop
