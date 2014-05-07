@@ -21,8 +21,8 @@ module Aptly
   # The content of stdout
   #
   def runcmd cmd
-    Mutex.lock!
-    at_exit { Mutex.unlock! }
+    Mutex.lock
+    at_exit { Mutex.unlock }
 
     Open3.popen3(cmd) do |_, stdout, stderr, thread|
       res = thread.value.exitstatus
@@ -34,7 +34,7 @@ module Aptly
       # upstream code but for now we can work around it.
       res = 1 if (res != 0 && err != '')
 
-      Mutex.unlock!
+      Mutex.unlock
 
       if res != 0
         raise AptlyError.new "aptly: command failed: #{cmd}", out, err

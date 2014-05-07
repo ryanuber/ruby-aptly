@@ -13,9 +13,9 @@ module Aptly
     # == Returns:
     # True, once the lock is acquired.
     #
-    def self.lock!
+    def self.lock
       while self.locked?
-        self.running? && sleep(5) || self.unlock!
+        self.running? && sleep(5) || self.unlock
       end
       File.open(@@mutex_path, 'w') {|f| f.write Process.pid}
     end
@@ -50,7 +50,7 @@ module Aptly
     # == Returns:
     # True if unlock happens, else false
     #
-    def self.unlock!
+    def self.unlock
       File.delete @@mutex_path if self.locked?
     end
   end
