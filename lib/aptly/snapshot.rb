@@ -66,6 +66,8 @@ module Aptly
   end
 
   class Snapshot
+    attr_accessor :name, :created_at, :description, :num_packages
+
     @name = ''
     @created_at = ''
     @description = ''
@@ -106,6 +108,47 @@ module Aptly
       res = []
       out = Aptly::runcmd "aptly snapshot show -with-packages #{@name.to_safe}"
       Aptly::parse_indented_list out.lines
+    end
+
+    # Pull packages from a snapshot into another, creating a new snapshot.
+    #
+    #  == Parameters:
+    # name::
+    #   The name of the snapshot to pull to
+    # source::
+    #   The repository containing the packages to pull in
+    # dest::
+    #   The name for the new snapshot which will be created
+    # packages::
+    #   An array of package names to search
+    # deps::
+    #   When true, process dependencies
+    # remove::
+    #   When true, removes package versions not found in source
+    #
+    def pull name, source, dest, packages: [], deps: true, remove: true
+      if packages.length == 0
+        raise AptlyError.new "1 or more package names are required"
+      end
+
+      cmd = 'aptly snapshot pull'
+      cmd += ' -no-deps' if !deps
+      cmd += ' -no-remove' if !remove
+      cmd += " #{name.to_safe} #{source.to_safe} #{dest.to_safe}"
+      cmd += " #{packages.join(' ')}" if !packages.empty?
+
+      Aptly::runcmd cmd
+    end
+    private :pull
+
+    # Shortcut method to pull packages to the current snapshot
+    def pull_from source, dest, packages: [], deps: true, remove: true
+      pull @name, source, dest, packages: packages, deps: deps, remove: remove
+    end
+
+    # Shortcut method to push packages from the current snapshot
+    def push_to dest, source, packages: [], deps: true, remove: true
+      pull source, @name, dest, packages: packages, deps: deps, remove: remove
     end
 
     # Verifies an existing snapshot is able to resolve dependencies. This method
