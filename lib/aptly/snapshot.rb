@@ -40,12 +40,12 @@ module Aptly
   private :create_snapshot
 
   # Shortcut method to create a snapshot from a mirror
-  def create_snapshot_from_mirror name, mirror_name
+  def create_mirror_snapshot name, mirror_name
     create_snapshot name, 'mirror', mirror_name
   end
 
   # Shortcut method to create a snapshot from a repo
-  def create_snapshot_from_repo name, repo_name
+  def create_repo_snapshot name, repo_name
     create_snapshot name, 'repo', repo_name
   end
 

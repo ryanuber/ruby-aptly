@@ -25,7 +25,6 @@ Examples
 ========
 
 ```ruby
-# Create a mirror
 mirror = Aptly.create_mirror(
     "ubuntu",
     "http://us.archive.ubuntu.com/ubuntu",
@@ -33,22 +32,19 @@ mirror = Aptly.create_mirror(
     components: ["main", "universe", "multiverse"],
     archlist: ["i386", "amd64"]
 )
-
-# Update the mirror
 mirror.update
 
-# Create a snapshot from a mirror
-snapshot1 = Aptly.create_snapshot_from_mirror "snap1", mirror.name
-
-# Create a repository
 repo = Aptly.create_repo "my-software"
-
-# Add a package file to a repo
 repo.add "/tmp/myapp.deb"
-
-# Add all debs in a directory to a repo
 repo.add "/tmp/incoming-debs"
 
-# Create a snapshot from a repo
-snapshot2 = Aptly.create_snapshot_from_repo "snap2", repo.name
+snap1 = Aptly.create_mirror_snapshot "snap1", mirror.name
+snap2 = Aptly.create_repo_snapshot "snap2", repo.name
+
+snap3 = Aptly.merge_snapshots snap1.name, snap2.name, latest: true
+snap3.list_packages
+
+snap3.publish
+
+Aptly.list_published
 ```
