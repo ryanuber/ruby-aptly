@@ -5,6 +5,7 @@ require 'aptly/error'
 require 'aptly/mirror'
 require 'aptly/repo'
 require 'aptly/snapshot'
+require 'aptly/publish'
 require 'aptly/string'
 
 module Aptly

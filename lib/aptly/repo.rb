@@ -209,6 +209,11 @@ module Aptly
       Aptly::runcmd "aptly repo remove #{@name.to_safe} #{pkg_spec.to_safe}"
     end
 
+    # Shortcut method to publish a repo from an Aptly::Repo instance.
+    def publish *args
+      Aptly::publish 'repo', @name, *args
+    end
+
     # save allows you to modify the repository distribution, comment, or
     # component string by using the attr_accessor's, and then calling this
     # method to persist them to aptly.

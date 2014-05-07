@@ -20,14 +20,22 @@ module Aptly
     end
 
     if list_snapshots.include? name
-      raise AptlyError.new "Snapshot '#{name}' already exists"
+      raise AptlyError.new "Snapshot '#{name}' exists"
+    end
+
+    if type == 'mirror' && !list_mirrors.include?(resource_name)
+      raise AptlyError.new "Mirror '#{resource_name}' does not exist"
+    end
+
+    if type == 'repo' && !list_repos.include?(resource_name)
+      raise AptlyError.new "Repo '#{resource_name}' does not exist"
     end
 
     cmd = 'aptly snapshot create '
     cmd += " #{name.to_safe} from #{type} #{resource_name.to_safe}"
 
     runcmd cmd
-    return Snapshot.new name
+    Snapshot.new name
   end
   private :create_snapshot
 
@@ -209,5 +217,9 @@ module Aptly
       return out.lines.length == 0
     end
 
+    # Shortcut method to publish a snapshot from an Aptly::Snapshot instance.
+    def publish *args
+      Aptly::publish 'snapshot', @name, *args
+    end
   end
 end
