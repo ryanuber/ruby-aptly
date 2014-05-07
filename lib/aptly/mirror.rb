@@ -138,7 +138,7 @@ module Aptly
     #
     def update ignore_cksum: false, ignore_sigs: false
       cmd = 'aptly mirror update'
-      cmd += ' -ignore-checksums' if ignore_cksums
+      cmd += ' -ignore-checksums' if ignore_cksum
       cmd += ' -ignore-signatures' if ignore_sigs
       cmd += " #{@name.to_safe}"
       Aptly::runcmd cmd
