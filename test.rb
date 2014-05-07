@@ -18,7 +18,8 @@ require 'aptly'
 #repo.import "puppetlabs-deps", "libstomp-ruby"
 
 #repo2 = Aptly.create_repo "repo2"
-#repo2.copy_from repo1.name, "libstomp-ruby"
+repo2 = Aptly::Repo.new "repo2"
+repo2.copy_from "repo1", "libstomp-ruby"
 #repo2 = Aptly::Repo.new "repo2"
 #repo2.remove "libstomp-ruby"
 

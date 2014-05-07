@@ -146,6 +146,7 @@ module Aptly
       cmd += " #{from_repo.to_safe} #{to_repo.to_safe} #{pkg_spec.to_safe}"
       Aptly::runcmd cmd
     end
+    private :copy
 
     # Shortcut method to copy resources in from another repository
     def copy_from from_repo, pkg_spec, deps: false
@@ -175,6 +176,7 @@ module Aptly
       cmd += " #{from_repo.to_safe} #{to_repo.to_safe} #{pkg_spec.to_safe}"
       Aptly::runcmd cmd
     end
+    private :move
 
     # Shortcut method to move packages in from another repo
     def move_from from_repo, pkg_spec, deps: false
