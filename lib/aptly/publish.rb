@@ -132,6 +132,7 @@ module Aptly
       @archlist = published[idx]['archlist']
     end
 
+    # Unpublish a currently published resource.
     def drop
       cmd = 'aptly publish drop'
       cmd += " #{@dist.to_safe}"
