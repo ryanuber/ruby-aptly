@@ -58,7 +58,8 @@ module Aptly
       cmd += ' -dep-follow-source' if follow_source
       cmd += " #{@name.to_safe}"
       cmd += " #{@sources.join(' ')}" if !sources.empty?
-      Aptly::runcmd cmd
+      out = Aptly::runcmd cmd
+      return out.lines.length == 0
     end
   end
 end
