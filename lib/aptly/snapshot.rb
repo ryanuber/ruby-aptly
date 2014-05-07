@@ -65,6 +65,43 @@ module Aptly
     parse_info out.lines
   end
 
+  # Merge snapshots into a single snapshot. This will create a new snapshot
+  # containing packages from all source snapshots. By default, packages with
+  # the same name-architecture pair are merged from right-over-left, meaning
+  # packages in the last source snapshot may overwrite the same packages in
+  # the first source snapshot if their name-architecture pairs match.
+  #
+  # == Parameters:
+  # dest::
+  #   The destination snapshot name (will be created)
+  # sources::
+  #   The names of source repositories. The order in which these are passed
+  #   matters unless `-latest` is not passed.
+  # latest::
+  #   When true, only the latest of each package will be copied into the
+  #   new snapshot, following a "latest wins" approach.
+  #
+  # == Returns:
+  # An Aptly::Snapshot object for the new snapshot
+  #
+  def merge_snapshots dest, sources: [], latest: false
+    if sources.length == 0
+      raise AptlyError.new '1 or more sources are required'
+    end
+
+    if list_snapshots.include? dest
+      raise AptlyError.new "Snapshot '#{dest}' exists"
+    end
+
+    cmd = 'aptly snapshot merge'
+    cmd += ' -latest' if latest
+    cmd += " #{dest.to_safe}"
+    cmd += " #{sources.join(' ')}"
+
+    runcmd cmd
+    Aptly::Snapshot.new dest
+  end
+
   class Snapshot
     attr_accessor :name, :created_at, :description, :num_packages
 
@@ -171,5 +208,6 @@ module Aptly
       out = Aptly::runcmd cmd
       return out.lines.length == 0
     end
+
   end
 end
