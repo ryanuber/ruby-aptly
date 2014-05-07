@@ -4,6 +4,7 @@ require 'aptly/mutex'
 require 'aptly/error'
 require 'aptly/mirror'
 require 'aptly/repo'
+require 'aptly/string'
 
 module Aptly
 

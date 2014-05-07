@@ -13,6 +13,7 @@ require 'aptly'
 #Aptly::update_mirrors
 #repo = Aptly.create_repo "test2", comment: "Cool repo, bro"
 repo = Aptly::Repo.new "test2"
-puts repo.inspect
+repo.comment = "some other comment, dude!"
+repo.save
 #repo.add "/Users/ryanuber/Downloads/"
 #repo.drop

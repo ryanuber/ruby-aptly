@@ -4,26 +4,16 @@ module Aptly
   def create_repo(
     name,
     dist: '',
-    archlist: [],
     comment: '',
-    component: 'main',
-    dall: false,
-    drecommends: false,
-    dsource: false,
-    dsuggests: false
+    component: 'main'
   )
     if list_repos.include? name
       raise AptlyError.new("Repo '#{name}' already exists")
     end
 
     cmd = "aptly repo create"
-    cmd += " -comment '#{comment.gsub("'", '')}'" if !comment.empty?
-    cmd += " -distribution #{dist}" if !dist.empty?
-    cmd += " -architectures #{archlist.join(',')}" if !archlist.empty?
-    cmd += ' -dep-follow-all-variants' if dall
-    cmd += ' -dep-follow-recommends' if drecommends
-    cmd += ' -dep-follow-source' if dsource
-    cmd += ' -dep-follow-suggests' if dsuggests
+    cmd += " -comment=#{comment.to_safe}" if !comment.empty?
+    cmd += " -distribution=#{dist.to_safe}" if !dist.empty?
     cmd += " #{name}"
 
     _, err, status = runcmd cmd
@@ -47,12 +37,14 @@ module Aptly
   end
 
   class Repo
-    @name = nil
-    @dist = nil
-    @component = nil
-    @comment = nil
+    attr_accessor :name, :dist, :component
+    attr_accessor :comment, :num_packages, :archlist
+
+    @name = ''
+    @dist = ''
+    @component = ''
+    @comment = ''
     @num_packages = 0
-    @archlist = []
 
     def initialize name
       if !Aptly::list_repos.include? name
@@ -68,16 +60,28 @@ module Aptly
     end
 
     def drop
-      out, err, status = Aptly::runcmd "aptly repo drop #{@name}"
+      out, err, status = Aptly::runcmd "aptly repo drop #{@name.to_safe}"
       if status != 0
-        raise AptlyError.new("Failed to drop repo '#{@name}'", out, err)
+        raise AptlyError.new("Failed to drop repo #{@name.to_safe}", out, err)
       end
     end
 
     def add path
-      out, err, status = Aptly::runcmd "aptly repo add #{@name} #{path}"
+      out, err, status = Aptly::runcmd "aptly repo add #{@name.to_safe} #{path}"
       if status != 0
-        raise AptlyError.new("Failed to add to repo: #{@path}", out, err)
+        raise AptlyError.new("Failed to add to repo: #{@path.to_safe}", out, err)
+      end
+    end
+
+    def save
+      cmd = "aptly repo edit"
+      cmd += " -distribution=#{@dist.to_safe}"
+      cmd += " -comment=#{@comment.to_safe}"
+      cmd += " -component=#{@component.to_safe}"
+      cmd += " #{@name.to_safe}"
+      out, err, status = Aptly::runcmd cmd
+      if status != 0
+        raise AptlyError.new("Failed to update repo #{@name}", out, err)
       end
     end
   end
