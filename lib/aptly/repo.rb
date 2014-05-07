@@ -101,6 +101,10 @@ module Aptly
       move @name, to_repo, pkg_spec, deps: deps
     end
 
+    def remove pkg_spec
+      Aptly::runcmd "aptly repo remove #{@name.to_safe} #{pkg_spec.to_safe}"
+    end
+
     def save
       cmd = "aptly repo edit"
       cmd += " -distribution=#{@dist.to_safe}"
