@@ -24,7 +24,11 @@ module Aptly
 
       Mutex.unlock!
 
-      return out, err, res
+      if res != 0
+        raise AptlyError.new "aptly: command failed: #{cmd}", out, err
+      end
+
+      return out
     end
   end
 
@@ -57,8 +61,7 @@ module Aptly
   end
 
   def list_snapshots
-    out, err, status = runcmd 'aptly snapshot list'
-    raise AptlyError.new('Failed to list snapshots', out, err) if status != 0
+    out = runcmd 'aptly snapshot list'
     parse_list out.lines
   end
 
