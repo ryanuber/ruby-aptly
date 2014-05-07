@@ -15,8 +15,7 @@ module Aptly
     #
     def self.lock!
       while self.locked?
-        self.unlock! if !self.running?
-        sleep 5
+        self.running? && sleep(5) || self.unlock!
       end
       File.open(@@mutex_path, 'w') {|f| f.write Process.pid}
     end
