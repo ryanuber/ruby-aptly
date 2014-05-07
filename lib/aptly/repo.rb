@@ -57,8 +57,18 @@ module Aptly
       Aptly::runcmd "aptly repo drop #{@name.to_safe}"
     end
 
-    def add path
-      Aptly::runcmd "aptly repo add #{@name.to_safe} #{path}"
+    def add path, remove_files: false
+      cmd = 'aptly repo add'
+      cmd += ' -remove-files' if remove_files
+      cmd += " #{@name.to_safe} #{path}"
+      Aptly::runcmd cmd
+    end
+
+    def import from_mirror, pkg_spec, deps: false
+      cmd = 'aptly repo import'
+      cmd += ' -with-deps' if deps
+      cmd += " #{from_mirror.to_safe} #{@name.to_safe} #{pkg_spec.to_safe}"
+      Aptly::runcmd cmd
     end
 
     def save

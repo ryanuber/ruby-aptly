@@ -46,7 +46,7 @@ module Aptly
   def parse_info lines
     items = Hash.new
     lines.reject{|l| l.empty?}.each do |line|
-      parts = line.split(/:\s/)
+      parts = line.split(/:\s/, 2)
       items[parts[0]] = parts[1].strip if parts.length == 2
     end
 
