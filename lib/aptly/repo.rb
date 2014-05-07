@@ -86,6 +86,21 @@ module Aptly
       copy @name, to_repo, pkg_spec, deps: deps
     end
 
+    def move from_repo, to_repo, pkg_spec, deps: false
+      cmd = 'aptly repo move'
+      cmd += ' -with-deps' if deps
+      cmd += " #{from_repo.to_safe} #{to_repo.to_safe} #{pkg_spec.to_safe}"
+      Aptly::runcmd cmd
+    end
+
+    def move_from from_repo, pkg_spec, deps: false
+      move from_repo, @name, pkg_spec, deps: deps
+    end
+
+    def move_to to_repo, pkg_spec, deps: false
+      move @name, to_repo, pkg_spec, deps: deps
+    end
+
     def save
       cmd = "aptly repo edit"
       cmd += " -distribution=#{@dist.to_safe}"
