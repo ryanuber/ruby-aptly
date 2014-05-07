@@ -14,5 +14,8 @@ mirror = Aptly::Mirror.new "puppetlabs-deps"
 #mirror.update
 
 #repo = Aptly.create_repo "repo1"
-repo = Aptly::Repo.new "repo1"
-repo.import "puppetlabs-deps", "libstomp-ruby"
+repo1 = Aptly::Repo.new "repo1"
+#repo.import "puppetlabs-deps", "libstomp-ruby"
+
+repo2 = Aptly.create_repo "repo2"
+repo2.copy_from repo1.name, "libstomp-ruby"
