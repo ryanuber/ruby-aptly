@@ -97,6 +97,20 @@ module Aptly
       Aptly::runcmd "aptly snapshot drop #{@name.to_safe}"
     end
 
+    # List all packages contained in a snapshot
+    #
+    # == Returns:
+    # An array of packages
+    #
+    def list_packages
+      res = []
+      out = Aptly::runcmd "aptly snapshot show -with-packages #{@name.to_safe}"
+      out.lines.each do |line|
+        res << line.strip if line.start_with? '  '
+      end
+      res
+    end
+
     # Verifies an existing snapshot is able to resolve dependencies. This method
     # currently only returns true/false status.
     #
