@@ -22,4 +22,4 @@ repo1 = Aptly::Repo.new "repo1"
 repo2 = Aptly::Repo.new "repo2"
 repo2.remove "libstomp-ruby"
 
-snap1 = Aptly.create_snapshot_from_mirror "newsnap2", mirror.name
+snap1 = Aptly.create_snapshot_from_repo "newsnap3", repo1.name

@@ -1,16 +1,24 @@
 module Aptly
   extend self
 
-  def create_snapshot_from_mirror name, mirror_name
+  def create_snapshot name, type, mirror_name
     if list_snapshots.include? name
       raise AptlyError.new "Snapshot '#{name}' already exists"
     end
 
     cmd = 'aptly snapshot create '
-    cmd += " #{name.to_safe} from mirror #{mirror_name.to_safe}"
+    cmd += " #{name.to_safe} from #{type} #{mirror_name.to_safe}"
 
     runcmd cmd
     return Snapshot.new name
+  end
+
+  def create_snapshot_from_mirror name, mirror_name
+    create_snapshot name, 'mirror', mirror_name
+  end
+
+  def create_snapshot_from_repo name, repo_name
+    create_snapshot name, 'repo', repo_name
   end
 
   def list_snapshots
