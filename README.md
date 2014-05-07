@@ -47,4 +47,15 @@ snap3.list_packages
 snap3.publish
 
 Aptly.list_published
+
+published_snap = Aptly::PublishedResource.new "precise"
+published_snap.drop
+
+snap3.drop
+snap2.drop
+snap1.drop
+
+repo.drop
+
+mirror.drop
 ```
