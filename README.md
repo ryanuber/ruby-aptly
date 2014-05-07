@@ -25,7 +25,7 @@ Examples
 # Create a mirror
 mirror = Aptly.create_mirror(
     "ubuntu",
-    "http://us.archive.ubuntu.org/ubuntu",
+    "http://us.archive.ubuntu.com/ubuntu",
     "precise",
     components: ["main", "universe", "multiverse"],
     archlist: ["i386", "amd64"]
