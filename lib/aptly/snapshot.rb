@@ -52,5 +52,13 @@ module Aptly
     def drop
       Aptly::runcmd "aptly snapshot drop #{@name.to_safe}"
     end
+
+    def verify sources: [], follow_source: false
+      cmd = 'aptly snapshot verify'
+      cmd += ' -dep-follow-source' if follow_source
+      cmd += " #{@name.to_safe}"
+      cmd += " #{@sources.join(' ')}" if !sources.empty?
+      Aptly::runcmd cmd
+    end
   end
 end
