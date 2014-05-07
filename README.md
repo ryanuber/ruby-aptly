@@ -3,9 +3,6 @@ ruby-aptly
 
 Ruby bindings for [aptly](http://aptly.info)
 
-**EXPERIMENTAL!**
-This is a work in progress and has undergone very little testing so far.
-
 Introduction
 ============
 
