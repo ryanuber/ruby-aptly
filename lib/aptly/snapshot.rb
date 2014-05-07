@@ -105,10 +105,7 @@ module Aptly
     def list_packages
       res = []
       out = Aptly::runcmd "aptly snapshot show -with-packages #{@name.to_safe}"
-      out.lines.each do |line|
-        res << line.strip if line.start_with? '  '
-      end
-      res
+      Aptly::parse_indented_list out.lines
     end
 
     # Verifies an existing snapshot is able to resolve dependencies. This method

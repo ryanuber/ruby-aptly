@@ -96,6 +96,17 @@ module Aptly
       Aptly::runcmd "aptly repo drop #{@name.to_safe}"
     end
 
+    # List all packages contained in a repository
+    #
+    # == Returns:
+    # An array of packages
+    #
+    def list_packages
+      res = []
+      out = Aptly::runcmd "aptly repo show -with-packages #{@name.to_safe}"
+      Aptly::parse_indented_list out.lines
+    end
+
     # Add debian packages to a repo
     #
     # == Parameters:

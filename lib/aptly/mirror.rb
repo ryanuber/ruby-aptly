@@ -116,6 +116,17 @@ module Aptly
       Aptly::runcmd "aptly mirror drop #{@name.to_safe}"
     end
 
+    # List all packages contained in a mirror
+    #
+    # == Returns:
+    # An array of packages
+    #
+    def list_packages
+      res = []
+      out = Aptly::runcmd "aptly mirror show -with-packages #{@name.to_safe}"
+      Aptly::parse_indented_list out.lines
+    end
+
     # Updates a repository, syncing in all packages which have not already been
     # downloaded and caches them locally.
     #

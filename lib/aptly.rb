@@ -90,4 +90,20 @@ module Aptly
     items
   end
 
+  # Parses aptly output of double-space indented lists
+  #
+  # == Parameters:
+  # lines::
+  #   Output lines from an aptly list command
+  #
+  # == Result:
+  # An array of items
+  #
+  def parse_indented_list lines
+    items = Array.new
+    lines.each do |line|
+      items << line.strip if line.start_with? '  '
+    end
+    items
+  end
 end
