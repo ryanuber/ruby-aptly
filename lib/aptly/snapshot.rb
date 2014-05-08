@@ -140,8 +140,17 @@ module Aptly
     end
 
     # Drops an existing snapshot
-    def drop
-      Aptly::runcmd "aptly snapshot drop #{@name.to_safe}"
+    #
+    # == Parameters:
+    # force::
+    #   When true, drops a snapshot regardless of relationships
+    #
+    def drop force: false
+      cmd = 'aptly snapshot drop'
+      cmd += ' -force' if force
+      cmd += " #{@name.to_safe}"
+
+      Aptly::runcmd cmd
     end
 
     # List all packages contained in a snapshot
