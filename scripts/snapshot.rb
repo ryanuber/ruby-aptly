@@ -62,9 +62,9 @@ rescue AptlyError => e
 === #{Time.now} ===
 --- error: #{e.message}
 --- stdout:
-#{e.aptly_output}
+#{e.stdout}
 --- stderr:
-#{e.aptly_error}
+#{e.stderr}
 
 EOF
   exit 1
