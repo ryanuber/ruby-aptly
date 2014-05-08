@@ -7,4 +7,4 @@ cp -R lib $NAME-$VER
 cp -R ext/debian $NAME-$VER
 tar czf "${NAME}_${VER}.orig.tar.gz" $NAME-$VER
 (cd $NAME-$VER; dpkg-source -b .)
-#pbuilder --build *.dsc
+pbuilder --build *.dsc
