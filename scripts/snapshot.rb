@@ -17,6 +17,7 @@ end
 begin
   to_snapshot = Array.new
   snapshots = Array.new
+  snapshot_names = Array.new
 
   # Add mirrors to the snapshot queue
   Aptly.list_mirrors.each do |mirror_name|
@@ -32,15 +33,21 @@ begin
   to_snapshot.each do |r|
     snapshot_name = "#{r.name}.#{id}"
     puts "==> Creating snapshot: #{snapshot_name}"
-    r.snapshot snapshot_name
 
     # Add it to our list of snapshots.
-    snapshots << snapshot_name
+    snapshots << r.snapshot(snapshot_name)
+    snapshot_names << snapshot_name
   end
 
   # Merge all of the snapshots taken into a single snapshot.
   puts "==> Creating merged snapshot: #{id}"
-  merged = Aptly.merge_snapshots id, sources: snapshots, latest: true
+  merged = Aptly.merge_snapshots id, sources: snapshot_names, latest: true
+
+  # Remove the remnant snapshots - we don't need them.
+  snapshots.each do |snapshot|
+    puts "==> Deleting snapshot: #{snapshot.name}"
+    snapshot.drop force: true
+  end
 
   # Expose the merged snapshot only
   publish_path = "snapshots/#{id}"
