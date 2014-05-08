@@ -30,17 +30,15 @@ mirror = Aptly.create_mirror(
     archlist: ["i386", "amd64"]
 )
 mirror.update
+snap1 = mirror.snapshot "snap1"
 
 repo = Aptly.create_repo "my-software"
 repo.add "/tmp/myapp.deb"
 repo.add "/tmp/incoming-debs"
-
-snap1 = Aptly.create_mirror_snapshot "snap1", mirror.name
-snap2 = Aptly.create_repo_snapshot "snap2", repo.name
+snap2 = repo.snapshot "snap2"
 
 snap3 = Aptly.merge_snapshots snap1.name, snap2.name, latest: true
 snap3.list_packages
-
 snap3.publish
 
 Aptly.list_published
