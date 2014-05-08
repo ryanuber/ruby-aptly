@@ -1,0 +1,2 @@
+lib/*.rb usr/lib/ruby/1.8/
+lib/aptly/* usr/lib/ruby/1.8/aptly/

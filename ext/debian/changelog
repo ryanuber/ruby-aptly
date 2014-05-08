@@ -1,0 +1,5 @@
+ruby-aptly (0.1.0) stable; urgency=low
+
+  * Initial deb release.
+
+ -- Ryan Uber <ru@ryanuber.com>  Thu, 8 May 2014 14:32:22 -0800
