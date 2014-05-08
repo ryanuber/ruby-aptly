@@ -40,7 +40,12 @@ begin
 
   # Merge all of the snapshots taken into a single snapshot.
   puts "==> Creating merged snapshot: #{id}"
-  Aptly.merge_snapshots id, sources: snapshots, latest: true
+  merged = Aptly.merge_snapshots id, sources: snapshots, latest: true
+
+  # Expose the merged snapshot only
+  publish_path = "snapshots/#{id}"
+  puts "==> Publishing merged snapshot: #{publish_path}"
+  merged.publish prefix: publish_path, dist: 'stable'
 
   puts 'Done!'
   exit 0

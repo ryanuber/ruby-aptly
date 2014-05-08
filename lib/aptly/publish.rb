@@ -54,6 +54,7 @@ module Aptly
     cmd += " -label #{label.to_safe}" if !label.empty?
     cmd += " -origin #{origin.to_safe}" if !origin.empty?
     cmd += " #{name.to_safe}"
+    cmd += " #{prefix.to_safe}" if !prefix.empty?
     if !secret_keyring.empty?
       cmd += " -secret-keyring #{secret_keyring.to_safe}"
     end
