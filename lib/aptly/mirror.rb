@@ -127,6 +127,11 @@ module Aptly
       Aptly::parse_indented_list out.lines
     end
 
+    # Shortcut method to snapshot an Aptly::Mirror object
+    def snapshot name
+      Aptly::create_mirror_snapshot name, @name
+    end
+
     # Updates a repository, syncing in all packages which have not already been
     # downloaded and caches them locally.
     #

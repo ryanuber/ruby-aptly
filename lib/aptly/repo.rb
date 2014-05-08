@@ -209,6 +209,11 @@ module Aptly
       Aptly::runcmd "aptly repo remove #{@name.to_safe} #{pkg_spec.to_safe}"
     end
 
+    # Shortcut method to snapshot an Aptly::Repo object
+    def snapshot name
+      Aptly::create_repo_snapshot name, @name
+    end
+
     # Shortcut method to publish a repo from an Aptly::Repo instance.
     def publish *args
       Aptly::publish 'repo', @name, *args
