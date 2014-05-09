@@ -1,8 +1,8 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: collectd
-Source: https://github.com/collectd/collectd
+Upstream-Name: ruby-aptly
+Source: https://github.com/ryanuber/ruby-aptly
 
 Files: *
-Copyright: 2012-2013 Elasticsearch BV
-License: Apache-2.0
- See /usr/share/common-licenses/Apache-2.0
+Copyright: 2014 Ryan Uber
+License: Expat
+ See /usr/share/common-licenses/Expat
