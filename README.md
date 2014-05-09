@@ -1,7 +1,7 @@
 ruby-aptly
 ==========
 
-Ruby bindings for [aptly](http://aptly.info)
+Ruby wrapper for managing deb repos with [Aptly](http://aptly.info).
 
 Introduction
 ============
