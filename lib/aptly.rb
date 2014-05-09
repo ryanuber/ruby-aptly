@@ -1,5 +1,6 @@
 require 'open3'
 
+require 'aptly/version'
 require 'aptly/mutex'
 require 'aptly/error'
 require 'aptly/mirror'
