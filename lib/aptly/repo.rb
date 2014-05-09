@@ -27,8 +27,8 @@ module Aptly
     end
 
     cmd = "aptly repo create"
-    cmd += " -comment=#{comment.to_safe}" if !comment.empty?
-    cmd += " -distribution=#{dist.to_safe}" if !dist.empty?
+    cmd += " -comment=#{comment.quote}" if !comment.empty?
+    cmd += " -distribution=#{dist.quote}" if !dist.empty?
     cmd += " #{name}"
 
     runcmd cmd
@@ -55,7 +55,7 @@ module Aptly
   # A hash of repository information
   #
   def repo_info name
-    out = runcmd "aptly repo show #{name.to_safe}"
+    out = runcmd "aptly repo show #{name.quote}"
     parse_info out.lines
   end
 
@@ -93,7 +93,7 @@ module Aptly
 
     # Drops an existing aptly repository
     def drop
-      Aptly::runcmd "aptly repo drop #{@name.to_safe}"
+      Aptly::runcmd "aptly repo drop #{@name.quote}"
     end
 
     # List all packages contained in a repository
@@ -103,7 +103,7 @@ module Aptly
     #
     def list_packages
       res = []
-      out = Aptly::runcmd "aptly repo show -with-packages #{@name.to_safe}"
+      out = Aptly::runcmd "aptly repo show -with-packages #{@name.quote}"
       Aptly::parse_indented_list out.lines
     end
 
@@ -118,7 +118,7 @@ module Aptly
     def add path, remove_files: false
       cmd = 'aptly repo add'
       cmd += ' -remove-files' if remove_files
-      cmd += " #{@name.to_safe} #{path}"
+      cmd += " #{@name.quote} #{path}"
       Aptly::runcmd cmd
     end
 
@@ -135,7 +135,7 @@ module Aptly
     def import from_mirror, pkg_spec, deps: false
       cmd = 'aptly repo import'
       cmd += ' -with-deps' if deps
-      cmd += " #{from_mirror.to_safe} #{@name.to_safe} #{pkg_spec.to_safe}"
+      cmd += " #{from_mirror.quote} #{@name.quote} #{pkg_spec.quote}"
       Aptly::runcmd cmd
     end
 
@@ -154,7 +154,7 @@ module Aptly
     def copy from_repo, to_repo, pkg_spec, deps: false
       cmd = 'aptly repo copy'
       cmd += ' -with-deps' if deps
-      cmd += " #{from_repo.to_safe} #{to_repo.to_safe} #{pkg_spec.to_safe}"
+      cmd += " #{from_repo.quote} #{to_repo.quote} #{pkg_spec.quote}"
       Aptly::runcmd cmd
     end
     private :copy
@@ -184,7 +184,7 @@ module Aptly
     def move from_repo, to_repo, pkg_spec, deps: false
       cmd = 'aptly repo move'
       cmd += ' -with-deps' if deps
-      cmd += " #{from_repo.to_safe} #{to_repo.to_safe} #{pkg_spec.to_safe}"
+      cmd += " #{from_repo.quote} #{to_repo.quote} #{pkg_spec.quote}"
       Aptly::runcmd cmd
     end
     private :move
@@ -206,7 +206,7 @@ module Aptly
     #   A debian pkg_spec string to select packages by
     #
     def remove pkg_spec
-      Aptly::runcmd "aptly repo remove #{@name.to_safe} #{pkg_spec.to_safe}"
+      Aptly::runcmd "aptly repo remove #{@name.quote} #{pkg_spec.quote}"
     end
 
     # Shortcut method to snapshot an Aptly::Repo object
@@ -224,10 +224,10 @@ module Aptly
     # method to persist them to aptly.
     def save
       cmd = "aptly repo edit"
-      cmd += " -distribution=#{@dist.to_safe}"
-      cmd += " -comment=#{@comment.to_safe}"
-      cmd += " -component=#{@component.to_safe}"
-      cmd += " #{@name.to_safe}"
+      cmd += " -distribution=#{@dist.quote}"
+      cmd += " -comment=#{@comment.quote}"
+      cmd += " -component=#{@component.quote}"
+      cmd += " #{@name.quote}"
 
       Aptly::runcmd cmd
     end

@@ -32,7 +32,7 @@ module Aptly
     end
 
     cmd = 'aptly snapshot create '
-    cmd += " #{name.to_safe} from #{type} #{resource_name.to_safe}"
+    cmd += " #{name.quote} from #{type} #{resource_name.quote}"
 
     runcmd cmd
     Snapshot.new name
@@ -69,7 +69,7 @@ module Aptly
   # A hash of snapshot information
   #
   def snapshot_info name
-    out = runcmd "aptly snapshot show #{name.to_safe}"
+    out = runcmd "aptly snapshot show #{name.quote}"
     parse_info out.lines
   end
 
@@ -103,7 +103,7 @@ module Aptly
 
     cmd = 'aptly snapshot merge'
     cmd += ' -latest' if latest
-    cmd += " #{dest.to_safe}"
+    cmd += " #{dest.quote}"
     cmd += " #{sources.join(' ')}"
 
     runcmd cmd
@@ -148,7 +148,7 @@ module Aptly
     def drop force: false
       cmd = 'aptly snapshot drop'
       cmd += ' -force' if force
-      cmd += " #{@name.to_safe}"
+      cmd += " #{@name.quote}"
 
       Aptly::runcmd cmd
     end
@@ -160,7 +160,7 @@ module Aptly
     #
     def list_packages
       res = []
-      out = Aptly::runcmd "aptly snapshot show -with-packages #{@name.to_safe}"
+      out = Aptly::runcmd "aptly snapshot show -with-packages #{@name.quote}"
       Aptly::parse_indented_list out.lines
     end
 
@@ -188,7 +188,7 @@ module Aptly
       cmd = 'aptly snapshot pull'
       cmd += ' -no-deps' if !deps
       cmd += ' -no-remove' if !remove
-      cmd += " #{name.to_safe} #{source.to_safe} #{dest.to_safe}"
+      cmd += " #{name.quote} #{source.quote} #{dest.quote}"
       cmd += " #{packages.join(' ')}" if !packages.empty?
 
       Aptly::runcmd cmd
@@ -220,7 +220,7 @@ module Aptly
     def verify sources: [], follow_source: false
       cmd = 'aptly snapshot verify'
       cmd += ' -dep-follow-source' if follow_source
-      cmd += " #{@name.to_safe}"
+      cmd += " #{@name.quote}"
       cmd += " #{@sources.join(' ')}" if !sources.empty?
       out = Aptly::runcmd cmd
       return out.lines.length == 0

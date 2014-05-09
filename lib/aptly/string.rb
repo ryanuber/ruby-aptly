@@ -1,5 +1,5 @@
 class String
-  def to_safe
+  def quote
     return '' if self.nil?
     "'" + self.gsub("'", '') + "'"
   end

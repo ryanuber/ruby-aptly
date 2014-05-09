@@ -44,7 +44,7 @@ module Aptly
     cmd += " -architectures #{archlist.join(',')}" if !archlist.empty?
     cmd += ' -ignore-signatures' if ignoresigs
     cmd += ' -with-sources' if source
-    cmd += " #{name.to_safe} #{baseurl.to_safe} #{dist.to_safe}"
+    cmd += " #{name.quote} #{baseurl.quote} #{dist.quote}"
     cmd += " #{components.join(' ')}"
 
     runcmd cmd
@@ -71,7 +71,7 @@ module Aptly
   # A hash of mirror information
   #
   def mirror_info name
-    out = runcmd "aptly mirror show #{name.to_safe}"
+    out = runcmd "aptly mirror show #{name.quote}"
     parse_info out.lines
   end
 
@@ -113,7 +113,7 @@ module Aptly
 
     # Drops an existing mirror from aptly's configuration
     def drop
-      Aptly::runcmd "aptly mirror drop #{@name.to_safe}"
+      Aptly::runcmd "aptly mirror drop #{@name.quote}"
     end
 
     # List all packages contained in a mirror
@@ -123,7 +123,7 @@ module Aptly
     #
     def list_packages
       res = []
-      out = Aptly::runcmd "aptly mirror show -with-packages #{@name.to_safe}"
+      out = Aptly::runcmd "aptly mirror show -with-packages #{@name.quote}"
       Aptly::parse_indented_list out.lines
     end
 
@@ -145,7 +145,7 @@ module Aptly
       cmd = 'aptly mirror update'
       cmd += ' -ignore-checksums' if ignore_cksum
       cmd += ' -ignore-signatures' if ignore_sigs
-      cmd += " #{@name.to_safe}"
+      cmd += " #{@name.quote}"
       Aptly::runcmd cmd
     end
   end

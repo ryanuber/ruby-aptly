@@ -47,16 +47,16 @@ module Aptly
 
     cmd = "aptly publish #{type}"
     cmd += ' -skip-signing' if !sign
-    cmd += " -component #{component.to_safe}" if !component.empty?
-    cmd += " -distribution #{dist.to_safe}" if !dist.empty?
-    cmd += " -gpg-key #{gpg_key.to_safe}" if !gpg_key.empty?
-    cmd += " -keyring #{keyring.to_safe}" if !keyring.empty?
-    cmd += " -label #{label.to_safe}" if !label.empty?
-    cmd += " -origin #{origin.to_safe}" if !origin.empty?
-    cmd += " #{name.to_safe}"
-    cmd += " #{prefix.to_safe}" if !prefix.empty?
+    cmd += " -component #{component.quote}" if !component.empty?
+    cmd += " -distribution #{dist.quote}" if !dist.empty?
+    cmd += " -gpg-key #{gpg_key.quote}" if !gpg_key.empty?
+    cmd += " -keyring #{keyring.quote}" if !keyring.empty?
+    cmd += " -label #{label.quote}" if !label.empty?
+    cmd += " -origin #{origin.quote}" if !origin.empty?
+    cmd += " #{name.quote}"
+    cmd += " #{prefix.quote}" if !prefix.empty?
     if !secret_keyring.empty?
-      cmd += " -secret-keyring #{secret_keyring.to_safe}"
+      cmd += " -secret-keyring #{secret_keyring.quote}"
     end
 
     runcmd cmd
@@ -136,8 +136,8 @@ module Aptly
     # Unpublish a currently published resource.
     def drop
       cmd = 'aptly publish drop'
-      cmd += " #{@dist.to_safe}"
-      cmd += " #{@prefix.to_safe}" if !@prefix.empty?
+      cmd += " #{@dist.quote}"
+      cmd += " #{@prefix.quote}" if !@prefix.empty?
 
       Aptly::runcmd cmd
     end

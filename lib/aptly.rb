@@ -34,7 +34,7 @@ module Aptly
       # Aptly doesn't always return 1 when reporting errors, and will sometimes
       # report informational messages to stderr. This needs to be fixed in the
       # upstream code but for now we can work around it.
-      res = 1 if (res != 0 && err != '')
+      res = 1 if (res == 0 && err != '')
 
       Mutex.unlock
 
