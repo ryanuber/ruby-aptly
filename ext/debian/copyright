@@ -3,6 +3,6 @@ Upstream-Name: ruby-aptly
 Source: https://github.com/ryanuber/ruby-aptly
 
 Files: *
-Copyright: 2014 Ryan Uber
-License: Expat
- See /usr/share/common-licenses/Expat
+Copyright: 2014 Cisco Systems
+License: Apache-2.0
+ See /usr/share/common-licenses/Apache-2.0
