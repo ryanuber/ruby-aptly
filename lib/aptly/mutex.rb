@@ -13,6 +13,18 @@ module Aptly
       @@mutex_path
     end
 
+    # Alter the mutex path. This should be set to the same path in all places
+    # where ruby-aptly will be used on the same host, since the mutex is meant
+    # to be system-wide.
+    #
+    # == Parameters:
+    # path::
+    #   The desired path for the mutex
+    #
+    def self.mutex_path= path
+      @@mutex_path = path
+    end
+
     # Attempts to acquire the aptly mutex. This method will wait if the mutex
     # is already locked elsewhere, and check back every 5 seconds to see if it
     # has been freed. On each check where the mutex is determined to be in use,
