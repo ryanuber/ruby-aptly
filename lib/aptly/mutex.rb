@@ -4,6 +4,15 @@ module Aptly
   class Mutex
     @@mutex_path = '/tmp/aptly.lock'
 
+    # Static attribute accessor for mutex path
+    #
+    # == Returns:
+    # The path to the aptly mutex file
+    #
+    def self.mutex_path
+      @@mutex_path
+    end
+
     # Attempts to acquire the aptly mutex. This method will wait if the mutex
     # is already locked elsewhere, and check back every 5 seconds to see if it
     # has been freed. On each check where the mutex is determined to be in use,
