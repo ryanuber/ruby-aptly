@@ -1,4 +1,5 @@
 ruby-aptly-*
+coverage/*
 *.gem
 *.dsc
 *.gz
