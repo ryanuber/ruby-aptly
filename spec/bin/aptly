@@ -1,5 +1,5 @@
 #!/bin/bash
 DIR="$(dirname ${BASH_SOURCE[0]})"
 CMD="${@}"
-FILE="${DIR}/output/${CMD// /_}.txt"
-[ -f "$FILE" ] && cat $FILE || exit 1
+FILE="${DIR}/output/${CMD// /_}.sh"
+[ -x "$FILE" ] && exec $FILE || exit 1
