@@ -67,4 +67,21 @@ module Aptly
       repo.list_packages.should eq(['aptly_0.5_amd64'])
     end
   end
+
+  describe "Copying Packages" do
+    it "should copy a package to another repo" do
+      repoA = Aptly.create_repo 'copyA'
+      repoB = Aptly.create_repo 'copyB'
+
+      # Copy to...
+      repoA.add 'spec/pkgs/pkg1_1.0.1-1_amd64.deb'
+      repoA.copy_to repoB.name, 'pkg1_1.0.1-1_amd64'
+      repoB.list_packages.should eq(['pkg1_1.0.1-1_amd64'])
+
+      # Copy from...
+      repoB.add 'spec/pkgs/pkg2_1.0.2-2_amd64.deb'
+      repoA.copy_from repoB.name, 'pkg2_1.0.2-2_amd64'
+      repoA.list_packages.should eq(['pkg1_1.0.1-1_amd64', 'pkg2_1.0.2-2_amd64'])
+    end
+  end
 end
