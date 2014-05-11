@@ -59,4 +59,12 @@ module Aptly
       repo.list_packages.should eq(['pkg1_1.0.1-1_amd64', 'pkg2_1.0.2-2_amd64'])
     end
   end
+
+  describe "Importing Packages" do
+    it "should import packages from a mirror" do
+      repo = Aptly.create_repo 'repo3'
+      repo.import 'aptly', 'aptly_0.5_amd64'
+      repo.list_packages.should eq(['aptly_0.5_amd64'])
+    end
+  end
 end
