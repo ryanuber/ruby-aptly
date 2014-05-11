@@ -84,4 +84,65 @@ module Aptly
       repoA.list_packages.should eq(['pkg1_1.0.1-1_amd64', 'pkg2_1.0.2-2_amd64'])
     end
   end
+
+  describe "Moving Packages" do
+    it "should move a package from one repo to another" do
+      repoA = Aptly.create_repo 'moveA'
+      repoB = Aptly.create_repo 'moveB'
+
+      # Move to...
+      repoA.add 'spec/pkgs/pkg1_1.0.1-1_amd64.deb'
+      repoA.move_to repoB.name, 'pkg1_1.0.1-1_amd64'
+      repoA.list_packages.should eq([])
+      repoB.list_packages.should eq(['pkg1_1.0.1-1_amd64'])
+
+      # Move from...
+      repoA.move_from repoB.name, 'pkg1_1.0.1-1_amd64'
+      repoA.list_packages.should eq(['pkg1_1.0.1-1_amd64'])
+      repoB.list_packages.should eq([])
+    end
+  end
+
+  describe "Removing Packages" do
+    it "should remove a package from a repo" do
+      repo = Aptly.create_repo 'remove'
+      repo.add 'spec/pkgs/pkg1_1.0.1-1_amd64.deb'
+      repo.list_packages.should eq(['pkg1_1.0.1-1_amd64'])
+
+      repo.remove 'pkg1_1.0.1-1_amd64'
+      repo.list_packages.should eq([])
+    end
+  end
+
+  describe "Snapshot Repos" do
+    it "should create a new snaphot of a repo" do
+      repo = Aptly.create_repo 'repo_to_snap'
+      repo.add 'spec/pkgs/pkg1_1.0.1-1_amd64.deb'
+      snap = repo.snapshot 'snap_from_repo'
+      snap.kind_of?(Aptly::Snapshot).should eq(true)
+    end
+  end
+
+  describe "Publish Repos" do
+    it "should publish an existing repo" do
+      repo = Aptly.create_repo 'repo_to_publish'
+      repo.add 'spec/pkgs/pkg1_1.0.1-1_amd64.deb'
+      repo.publish dist: 'repo_to_publish'
+    end
+  end
+
+  describe "Modify Repo" do
+    it "should modify the repo metadata" do
+      repoA = Aptly.create_repo 'modify'
+      repoA.dist = 'mydist'
+      repoA.comment = 'mycomment'
+      repoA.component = 'mycomponent'
+      repoA.save
+
+      repoB = Aptly::Repo.new 'modify'
+      repoB.dist.should eq('mydist')
+      repoB.comment.should eq('mycomment')
+      repoB.component.should eq('mycomponent')
+    end
+  end
 end
