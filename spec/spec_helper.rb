@@ -5,7 +5,7 @@ SimpleCov.start do
 end
 require 'aptly'
 Aptly::Mutex.mutex_path = "/tmp/aptly_#{Random.rand(1024)}.lock"
-ENV['PATH'] += ":#{Dir.getwd}/spec/bin"
+ENV['PATH'] = "#{Dir.getwd}/spec/bin:#{ENV['PATH']}"
 
 # Create a mirror of the aptly repo for testing purposes
 puts "==> Mirroring aptly..."
