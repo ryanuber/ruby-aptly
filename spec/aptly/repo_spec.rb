@@ -45,4 +45,16 @@ module Aptly
       repo.list_packages.should eq([])
     end
   end
+
+  describe "Adding Packages" do
+    it "should successfully add a single file" do
+      repo = Aptly::Repo.new 'repo2'
+      repo.add 'spec/pkgs/pkg1_1.0.1-1_amd64.deb'
+    end
+
+    it "should reflect the new package in the repo content" do
+      repo = Aptly::Repo.new 'repo2'
+      repo.list_packages.should eq(['pkg1_1.0.1-1_amd64'])
+    end
+  end
 end
