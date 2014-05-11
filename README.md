@@ -9,6 +9,8 @@ Compatibility
 ruby-aptly is currently tested against Aptly 0.5. It is possible that it will
 also work fine on older or newer versions, but this is untested.
 
+ruby-aptly should work on any Ruby >= 1.8.7.
+
 ---
 
 Aptly is a great tool for managing Apt repositories. It is reliable, actively
