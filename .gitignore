@@ -1,5 +1,7 @@
 ruby-aptly-*
 coverage/*
+spec/bin/*
+.aptly/*
 *.gem
 *.dsc
 *.gz

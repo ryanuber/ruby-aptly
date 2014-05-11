@@ -10,5 +10,4 @@ task :prep do
 end
 task :clean do
   FileUtils.rm_rf "#{File.dirname(__FILE__)}/.aptly"
-  FileUtils.rm_rf "#{File.dirname(__FILE__)}/spec/bin/real_aptly"
 end
