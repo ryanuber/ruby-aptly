@@ -1,0 +1,3 @@
+#!/bin/sh
+DIR="$(dirname ${BASH_SOURCE[0]})"
+exec $DIR/real_aptly -config=$DIR/aptly.conf ${@}
