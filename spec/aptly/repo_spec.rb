@@ -50,11 +50,13 @@ module Aptly
     it "should successfully add a single file" do
       repo = Aptly::Repo.new 'repo2'
       repo.add 'spec/pkgs/pkg1_1.0.1-1_amd64.deb'
+      repo.list_packages.should eq(['pkg1_1.0.1-1_amd64'])
     end
 
-    it "should reflect the new package in the repo content" do
+    it "should successfully add a directory of packages" do
       repo = Aptly::Repo.new 'repo2'
-      repo.list_packages.should eq(['pkg1_1.0.1-1_amd64'])
+      repo.add 'spec/pkgs'
+      repo.list_packages.should eq(['pkg1_1.0.1-1_amd64', 'pkg2_1.0.2-2_amd64'])
     end
   end
 end
