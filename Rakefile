@@ -4,7 +4,7 @@ require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new
 
 task :default => [:test]
-task :test => [:prep, :spec, :clean]
+task :test => [:clean, :prep, :spec]
 task :prep do
   %x(cd spec; sh setup.sh)
 end

@@ -38,4 +38,11 @@ module Aptly
       repos.should eq(['repo2'])
     end
   end
+
+  describe "Listing Repo Content" do
+    it "should find no packages in the new, empty repo" do
+      repo = Aptly::Repo.new 'repo2'
+      repo.list_packages.should eq([])
+    end
+  end
 end
