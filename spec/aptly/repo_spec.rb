@@ -15,4 +15,11 @@ module Aptly
       expect { Aptly.create_repo 'repo1' }.to raise_error
     end
   end
+
+  describe "Loading Aptly Repos" do
+    it "should successfully load existing repos" do
+      repo = Aptly::Repo.new 'repo1'
+      repo.kind_of?(Aptly::Repo).should eq(true)
+    end
+  end
 end

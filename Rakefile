@@ -9,6 +9,6 @@ task :prep do
   %x(cd spec; sh setup.sh)
 end
 task :clean do
-  FileUtils.rm_rf '.aptly'
-  FileUtils.rm_rf 'spec/bin/real_aptly'
+  FileUtils.rm_rf "#{File.dirname(__FILE__)}/.aptly"
+  FileUtils.rm_rf "#{File.dirname(__FILE__)}/spec/bin/real_aptly"
 end
