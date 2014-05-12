@@ -41,7 +41,7 @@ begin
 
   # Merge all of the snapshots taken into a single snapshot.
   puts "==> Creating merged snapshot: #{id}"
-  merged = Aptly.merge_snapshots id, sources: snapshot_names, latest: true
+  merged = Aptly.merge_snapshots id, :sources => snapshot_names, :latest => true
 
   # Remove the remnant snapshots - we don't need them.
   snapshots.each do |snapshot|
@@ -52,7 +52,7 @@ begin
   # Expose the merged snapshot only
   publish_path = "snapshots/#{id}"
   puts "==> Publishing merged snapshot: #{publish_path}"
-  merged.publish prefix: publish_path, dist: 'stable'
+  merged.publish :prefix => publish_path, :dist => 'stable'
 
   puts 'Done!'
   exit 0
