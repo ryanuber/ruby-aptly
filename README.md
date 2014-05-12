@@ -3,8 +3,7 @@ ruby-aptly
 
 Ruby wrapper for managing deb repos with [Aptly](http://aptly.info).
 
-Compatibility
-=============
+## Compatibility
 
 ruby-aptly is currently tested against Aptly 0.5. It is possible that it will
 also work fine on older or newer versions, but this is untested.
