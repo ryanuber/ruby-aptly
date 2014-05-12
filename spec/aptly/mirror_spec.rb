@@ -38,4 +38,19 @@ module Aptly
       # Need to check here for updated content
     end
   end
+
+  describe "List Packages" do
+    it "should return a list of packages in the mirror" do
+      mirror = Aptly::Mirror.new 'aptly'
+      mirror.list_packages.should include('aptly_0.5.1_amd64')
+    end
+  end
+
+  describe "Snapshot Mirrors" do
+    it "should create a new snaphot of a mirror" do
+      mirror = Aptly::Mirror.new 'aptly'
+      snap = mirror.snapshot 'snap_from_mirror'
+      snap.kind_of?(Aptly::Snapshot).should eq(true)
+    end
+  end
 end
