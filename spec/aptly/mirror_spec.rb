@@ -30,4 +30,12 @@ module Aptly
       expect { Aptly::Mirror.new('nothing') }.to raise_error
     end
   end
+
+  describe "Updating Mirrors" do
+    it "should successfully update a mirror" do
+      mirror = Aptly::Mirror.new 'aptly'
+      mirror.update
+      # Need to check here for updated content
+    end
+  end
 end

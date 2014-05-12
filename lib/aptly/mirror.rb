@@ -75,14 +75,6 @@ module Aptly
     parse_info out.lines
   end
 
-  # Iterates over all repositories in aptly and calls an update on each.
-  def update_mirrors
-    for name in list_mirrors
-      mirror = Aptly::Mirror.new name
-      mirror.update
-    end
-  end
-
   class Mirror
     attr_accessor :name, :baseurl, :dist, :components, :archlist
 
