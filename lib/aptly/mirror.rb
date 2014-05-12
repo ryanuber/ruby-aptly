@@ -27,11 +27,13 @@ module Aptly
     name,
     baseurl,
     dist,
-    components: [],
-    archlist: [],
-    ignoresigs: false,
-    source: false
+    kwargs={}
   )
+    components = kwargs.arg :components, []
+    archlist = kwargs.arg :archlist, []
+    ignoresigs = kwargs.arg :ignoresigs, false
+    source = kwargs.arg :source, false
+
     if list_mirrors.include? name
       raise AptlyError.new "Mirror '#{name}' already exists"
     end
@@ -133,11 +135,15 @@ module Aptly
     # ignore_sigs::
     #   Ignore author signature mismatches
     #
-    def update ignore_cksum: false, ignore_sigs: false
+    def update kwargs={}
+      ignore_cksum = kwargs.arg :ignore_cksum, false
+      ignore_sigs = kwargs.arg :ignore_sigs, false
+
       cmd = 'aptly mirror update'
       cmd += ' -ignore-checksums' if ignore_cksum
       cmd += ' -ignore-signatures' if ignore_sigs
       cmd += " #{@name.quote}"
+
       Aptly::runcmd cmd
     end
   end

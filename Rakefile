@@ -18,5 +18,6 @@ end
 task :deb do
   %x(gem build ./aptly.gemspec)
   %x(fpm -s gem -t deb --license 'Apache-2.0' \
+     --prefix /var/lib/gems/1.8 \
 	   --url http://github.com/ryanuber/ruby-aptly ./aptly-*.gem)
 end

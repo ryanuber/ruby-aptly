@@ -8,6 +8,7 @@ require 'aptly/repo'
 require 'aptly/snapshot'
 require 'aptly/publish'
 require 'aptly/string'
+require 'aptly/hash'
 
 module Aptly
 
@@ -107,5 +108,9 @@ module Aptly
       items << line.strip if line.start_with? '  '
     end
     items
+  end
+
+  def from_kwargs key, default, kwargs
+    kwargs.has_key? key ? kwargs[key] : default
   end
 end

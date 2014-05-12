@@ -16,12 +16,10 @@ module Aptly
   # == Returns:
   # An Aptly::Repo object
   #
-  def create_repo(
-    name,
-    dist: '',
-    comment: '',
-    component: 'main'
-  )
+  def create_repo name, kwargs={}
+    dist = kwargs.arg :dist, ''
+    comment = kwargs.arg :comment, ''
+    component = kwargs.arg :component, 'main'
     if list_repos.include? name
       raise AptlyError.new("Repo '#{name}' already exists")
     end
@@ -115,10 +113,13 @@ module Aptly
     # remove_files::
     #   When true, deletes source after import
     #
-    def add path, remove_files: false
+    def add path, kwargs={}
+      remove_files = kwargs.arg :remove_files, false
+
       cmd = 'aptly repo add'
       cmd += ' -remove-files' if remove_files
       cmd += " #{@name.quote} #{path}"
+
       Aptly::runcmd cmd
     end
 
@@ -132,10 +133,13 @@ module Aptly
     # deps::
     #   When true, follows package dependencies and adds them
     #
-    def import from_mirror, pkg_spec, deps: false
+    def import from_mirror, pkg_spec, kwargs={}
+      deps = kwargs.arg :deps, false
+
       cmd = 'aptly repo import'
       cmd += ' -with-deps' if deps
       cmd += " #{from_mirror.quote} #{@name.quote} #{pkg_spec.quote}"
+
       Aptly::runcmd cmd
     end
 
@@ -151,22 +155,27 @@ module Aptly
     # deps::
     #   When true, follow deps and copy them
     #
-    def copy from_repo, to_repo, pkg_spec, deps: false
+    def copy from_repo, to_repo, pkg_spec, kwargs={}
+      deps = kwargs.arg :deps, false
+
       cmd = 'aptly repo copy'
       cmd += ' -with-deps' if deps
       cmd += " #{from_repo.quote} #{to_repo.quote} #{pkg_spec.quote}"
+
       Aptly::runcmd cmd
     end
     private :copy
 
     # Shortcut method to copy resources in from another repository
-    def copy_from from_repo, pkg_spec, deps: false
-      copy from_repo, @name, pkg_spec, deps: deps
+    def copy_from from_repo, pkg_spec, kwargs={}
+      deps = kwargs.arg :deps, false
+      copy from_repo, @name, pkg_spec, :deps => deps
     end
 
     # Shortcut method to copy resources out to another repository
-    def copy_to to_repo, pkg_spec, deps: false
-      copy @name, to_repo, pkg_spec, deps: deps
+    def copy_to to_repo, pkg_spec, kwargs={}
+      deps = kwargs.arg :deps, false
+      copy @name, to_repo, pkg_spec, :deps => deps
     end
 
     # Move package resources from one repository to another
@@ -181,22 +190,27 @@ module Aptly
     # deps::
     #   When true, follow deps and move them too
     #
-    def move from_repo, to_repo, pkg_spec, deps: false
+    def move from_repo, to_repo, pkg_spec, kwargs={}
+      deps = kwargs.arg :deps, false
+
       cmd = 'aptly repo move'
       cmd += ' -with-deps' if deps
       cmd += " #{from_repo.quote} #{to_repo.quote} #{pkg_spec.quote}"
+
       Aptly::runcmd cmd
     end
     private :move
 
     # Shortcut method to move packages in from another repo
-    def move_from from_repo, pkg_spec, deps: false
-      move from_repo, @name, pkg_spec, deps: deps
+    def move_from from_repo, pkg_spec, kwargs={}
+      deps = kwargs.arg :deps, false
+      move from_repo, @name, pkg_spec, :deps => deps
     end
 
     # Shortcut method to move packages out to another repository
-    def move_to to_repo, pkg_spec, deps: false
-      move @name, to_repo, pkg_spec, deps: deps
+    def move_to to_repo, pkg_spec, kwargs={}
+      deps = kwargs.arg :deps, false
+      move @name, to_repo, pkg_spec, :deps => deps
     end
 
     # Remove packages selectively from a repository

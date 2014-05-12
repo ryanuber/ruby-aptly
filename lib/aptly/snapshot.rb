@@ -92,7 +92,10 @@ module Aptly
   # == Returns:
   # An Aptly::Snapshot object for the new snapshot
   #
-  def merge_snapshots dest, sources: [], latest: false
+  def merge_snapshots dest, kwargs={}
+    sources = kwargs.arg 'sources', []
+    latest = kwargs.arg 'latest', false
+
     if sources.length == 0
       raise AptlyError.new '1 or more sources are required'
     end
@@ -145,7 +148,9 @@ module Aptly
     # force::
     #   When true, drops a snapshot regardless of relationships
     #
-    def drop force: false
+    def drop kwargs={}
+      force = kwargs.arg 'force', false
+
       cmd = 'aptly snapshot drop'
       cmd += ' -force' if force
       cmd += " #{@name.quote}"
@@ -180,7 +185,11 @@ module Aptly
     # remove::
     #   When true, removes package versions not found in source
     #
-    def pull name, source, dest, packages: [], deps: true, remove: true
+    def pull name, source, dest, kwargs={}
+      packages = kwargs.arg :packages, []
+      deps = kwargs.arg :deps, true
+      remove = kwargs.arg :remove, true
+
       if packages.length == 0
         raise AptlyError.new "1 or more package names are required"
       end
@@ -196,13 +205,21 @@ module Aptly
     private :pull
 
     # Shortcut method to pull packages to the current snapshot
-    def pull_from source, dest, packages: [], deps: true, remove: true
-      pull @name, source, dest, packages: packages, deps: deps, remove: remove
+    def pull_from source, dest, kwargs={}
+      packages = kwargs.arg :packages, []
+      deps = kwargs.arg :deps, true
+      remove = kwargs.arg :remove, true
+
+      pull @name, source, dest, :packages => pacakges, :deps => deps, :remove => remove
     end
 
     # Shortcut method to push packages from the current snapshot
-    def push_to dest, source, packages: [], deps: true, remove: true
-      pull source, @name, dest, packages: packages, deps: deps, remove: remove
+    def push_to dest, source, kwargs={}
+      packages = kwargs.arg :packages, []
+      deps = kwargs.arg :deps, true
+      remove = kwargs.arg :remove, true
+
+      pull source, @name, dest, :packages => pacakges, :deps => deps, :remove => remove
     end
 
     # Verifies an existing snapshot is able to resolve dependencies. This method
@@ -217,11 +234,15 @@ module Aptly
     # == Returns:
     # True if verified, false if any deps are missing
     #
-    def verify sources: [], follow_source: false
+    def verify kwargs={}
+      sources = kwargs.arg :sources, []
+      follow_source = kwargs.arg :follow_source, false
+
       cmd = 'aptly snapshot verify'
       cmd += ' -dep-follow-source' if follow_source
       cmd += " #{@name.quote}"
       cmd += " #{@sources.join(' ')}" if !sources.empty?
+
       out = Aptly::runcmd cmd
       return out.lines.length == 0
     end

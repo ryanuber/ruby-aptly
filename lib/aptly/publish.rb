@@ -31,16 +31,18 @@ module Aptly
   def publish(
     type,
     name,
-    prefix: '',
-    component: '',
-    dist: '',
-    gpg_key: '',
-    keyring: '',
-    label: '',
-    origin: '',
-    secret_keyring: '',
-    sign: true
+    kwargs={}
   )
+    prefix = kwargs.arg :prefix, ''
+    component = kwargs.arg :component, ''
+    dist = kwargs.arg :dist, ''
+    gpg_key = kwargs.arg :gpg_key, ''
+    keyring = kwargs.arg :keyring, ''
+    label = kwargs.arg :label, ''
+    origin = kwargs.arg :origin, ''
+    secret_keyring = kwargs.arg :secret_keyring, ''
+    sign = kwargs.arg :sign, true
+
     if type != 'repo' && type != 'snapshot'
       raise AptlyError "Invalid publish type: #{type}"
     end
