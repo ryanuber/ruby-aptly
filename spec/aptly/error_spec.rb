@@ -2,11 +2,10 @@ require 'spec_helper'
 
 module Aptly
   describe "AptlyError" do
-    it "should contain stdout and stderr" do
-      e = AptlyError.new 'a', 'b', 'c'
+    it "should contain output" do
+      e = AptlyError.new 'a', 'b'
       e.message.should eq('a')
-      e.stdout.should eq('b')
-      e.stderr.should eq('c')
+      e.output.should eq('b')
     end
   end
 end

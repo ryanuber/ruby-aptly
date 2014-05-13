@@ -1,5 +1,3 @@
-require 'open3'
-
 require 'aptly/version'
 require 'aptly/mutex'
 require 'aptly/error'
@@ -27,24 +25,16 @@ module Aptly
     Mutex.lock
     at_exit { Mutex.unlock }
 
-    Open3.popen3(cmd) do |_, stdout, stderr, thread|
-      res = thread.value.exitstatus
-      out = stdout.read
-      err = stderr.read
+    out = %x(#{cmd} 2>&1)
+    res = $?.exitstatus
 
-      # Aptly doesn't always return 1 when reporting errors, and will sometimes
-      # report informational messages to stderr. This needs to be fixed in the
-      # upstream code but for now we can work around it.
-      res = 1 if (res == 0 && err != '' && !err.include?('Good signature'))
+    Mutex.unlock
 
-      Mutex.unlock
-
-      if res != 0
-        raise AptlyError.new "aptly: command failed: #{cmd}", out, err
-      end
-
-      return out
+    if res != 0
+      raise AptlyError.new "aptly: command failed: #{cmd}", out
     end
+
+    return out
   end
 
   # Parses the output lines of aptly listing commands

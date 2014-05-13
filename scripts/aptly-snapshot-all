@@ -4,6 +4,7 @@
 # named by the current UNIX timestamp. Once all snapshots are created, it
 # will then create a merged snapshot of all of the newly-created snapshots.
 
+require 'rubygems'
 require 'syslog'
 require 'aptly'
 
@@ -61,10 +62,8 @@ rescue AptlyError => e
   File.open('aptly.log', 'a+').write <<-EOF
 === #{Time.now} ===
 --- error: #{e.message}
---- stdout:
-#{e.stdout}
---- stderr:
-#{e.stderr}
+--- output:
+#{e.output}
 
 EOF
   exit 1

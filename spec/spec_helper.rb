@@ -17,7 +17,6 @@ begin
   mirror.update
 rescue AptlyError => e
   puts "Failed: #{e.message}"
-  puts "==> stdout:\n#{e.stdout}\n"
-  puts "==> stderr:\n#{e.stderr}\n"
+  puts "==> output:\n#{e.output}\n"
 end
 puts "Done!"

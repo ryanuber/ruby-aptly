@@ -1,11 +1,9 @@
 class AptlyError < RuntimeError
-  attr_accessor :stderr, :stdout
-  @stdout = nil
-  @stderr = nil
+  attr_accessor :output
+  @output = nil
 
-  def initialize msg=nil, out=nil, err=nil
-    @stdout = out
-    @stderr = err
+  def initialize msg=nil, output=nil
+    @output = output
     super msg
   end
 end

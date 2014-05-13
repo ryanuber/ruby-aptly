@@ -2,6 +2,7 @@
 
 # This script will update all mirrors known to aptly.
 
+require 'rubygems'
 require 'syslog'
 require 'aptly'
 
@@ -19,10 +20,8 @@ rescue AptlyError => e
   File.open('aptly.log', 'a+').write <<-EOF
 === #{Time.now} ===
 --- error: #{e.message}
---- stdout:
-#{e.stdout}
---- stderr:
-#{e.stderr}
+--- output:
+#{e.output}
 
 EOF
   exit 1
