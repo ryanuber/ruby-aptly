@@ -99,8 +99,4 @@ module Aptly
     end
     items
   end
-
-  def from_kwargs key, default, kwargs
-    kwargs.has_key? key ? kwargs[key] : default
-  end
 end

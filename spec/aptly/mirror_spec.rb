@@ -7,7 +7,7 @@ module Aptly
     it "should fail to create a mirror with a duplicate name" do
       expect { Aptly.create_mirror(
         'aptly', 'http://repo.aptly.info', 'squeeze',
-        components: ['main']
+        :components => ['main']
       )}.to raise_error
     end
 
@@ -27,7 +27,7 @@ module Aptly
 
   describe "Loading Mirrors" do
     it "should error trying to load a mirror that doesn't exist" do
-      expect { Aptly::Mirror.new('nothing') }.to raise_error
+      expect { Aptly::Mirror.new 'nothing' }.to raise_error
     end
   end
 
