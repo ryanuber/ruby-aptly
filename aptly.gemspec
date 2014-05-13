@@ -13,7 +13,6 @@ Gem::Specification.new do |s|
   s.files         = files.grep(/^(lib|bin)/)
   s.homepage      = 'https://github.com/ryanuber/ruby-aptly'
   s.license       = 'Apache 2.0'
-  s.executables   = files.grep(/^bin/) { |f| File.basename f }
   s.test_files    = files.grep(/^spec/)
   s.require_paths = ['lib']
 
