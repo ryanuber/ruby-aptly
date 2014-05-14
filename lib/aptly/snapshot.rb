@@ -149,7 +149,7 @@ module Aptly
     #   When true, drops a snapshot regardless of relationships
     #
     def drop kwargs={}
-      force = kwargs.arg 'force', false
+      force = kwargs.arg :force, false
 
       cmd = 'aptly snapshot drop'
       cmd += ' -force' if force
