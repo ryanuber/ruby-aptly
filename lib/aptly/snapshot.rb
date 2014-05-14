@@ -93,8 +93,8 @@ module Aptly
   # An Aptly::Snapshot object for the new snapshot
   #
   def merge_snapshots dest, kwargs={}
-    sources = kwargs.arg 'sources', []
-    latest = kwargs.arg 'latest', false
+    sources = kwargs.arg :sources, []
+    latest = kwargs.arg :latest, false
 
     if sources.length == 0
       raise AptlyError.new '1 or more sources are required'
