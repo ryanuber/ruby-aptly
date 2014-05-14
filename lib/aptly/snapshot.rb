@@ -248,8 +248,8 @@ module Aptly
     end
 
     # Shortcut method to publish a snapshot from an Aptly::Snapshot instance.
-    def publish *args
-      Aptly::publish 'snapshot', @name, *args
+    def publish args
+      Aptly::publish 'snapshot', @name, args
     end
   end
 end

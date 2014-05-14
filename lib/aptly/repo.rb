@@ -229,8 +229,8 @@ module Aptly
     end
 
     # Shortcut method to publish a repo from an Aptly::Repo instance.
-    def publish *args
-      Aptly::publish 'repo', @name, *args
+    def publish args
+      Aptly::publish 'repo', @name, args
     end
 
     # save allows you to modify the repository distribution, comment, or
