@@ -244,7 +244,7 @@ module Aptly
       cmd += " #{sources.join(' ')}" if !sources.empty?
 
       out = Aptly::runcmd cmd
-      return out.lines.length == 0
+      return out == 0
     end
 
     # Shortcut method to publish a snapshot from an Aptly::Snapshot instance.
