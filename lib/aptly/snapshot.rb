@@ -215,7 +215,7 @@ module Aptly
       end
 
       Aptly::runcmd cmd
-      Aptly::Snapshot.new name
+      Aptly::Snapshot.new dest
     end
     private :pull
 
