@@ -14,8 +14,10 @@ module Aptly
   # == Returns:
   # An Aptly::Snapshot object
   #
-  def create_snapshot name, type, resource_name
-    if type != 'mirror' && type != 'repo'
+  def create_snapshot name, type, kwargs={}
+    resource_name = kwargs.arg :resource_name, ''
+
+    if type != 'mirror' && type != 'repo' && type != 'empty'
       raise AptlyError.new "Invalid snapshot type: #{type}"
     end
 
@@ -31,8 +33,13 @@ module Aptly
       raise AptlyError.new "Repo '#{resource_name}' does not exist"
     end
 
-    cmd = 'aptly snapshot create '
-    cmd += " #{name.quote} from #{type} #{resource_name.quote}"
+    cmd = 'aptly snapshot create'
+    cmd += " #{name.quote}"
+    if type == 'empty'
+      cmd += ' empty'
+    else
+      cmd += " from #{type} #{resource_name.quote}"
+    end
 
     runcmd cmd
     Snapshot.new name
@@ -41,12 +48,17 @@ module Aptly
 
   # Shortcut method to create a snapshot from a mirror
   def create_mirror_snapshot name, mirror_name
-    create_snapshot name, 'mirror', mirror_name
+    create_snapshot name, 'mirror', :resource_name => mirror_name
   end
 
   # Shortcut method to create a snapshot from a repo
   def create_repo_snapshot name, repo_name
-    create_snapshot name, 'repo', repo_name
+    create_snapshot name, 'repo', :resource_name => repo_name
+  end
+
+  # Shortcut method to create an empty snapshot
+  def create_empty_snapshot name
+    create_snapshot name, 'empty'
   end
 
   # List existing snapshots
