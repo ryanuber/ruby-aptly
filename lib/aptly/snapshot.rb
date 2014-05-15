@@ -225,7 +225,7 @@ module Aptly
       deps = kwargs.arg :deps, true
       remove = kwargs.arg :remove, true
 
-      pull @name, source, dest, :packages => pacakges, :deps => deps, :remove => remove
+      pull @name, source, dest, :packages => packages, :deps => deps, :remove => remove
     end
 
     # Shortcut method to push packages from the current snapshot
@@ -234,7 +234,7 @@ module Aptly
       deps = kwargs.arg :deps, true
       remove = kwargs.arg :remove, true
 
-      pull source, @name, dest, :packages => pacakges, :deps => deps, :remove => remove
+      pull source, @name, dest, :packages => packages, :deps => deps, :remove => remove
     end
 
     # Verifies an existing snapshot is able to resolve dependencies. This method
