@@ -210,9 +210,12 @@ module Aptly
       cmd += ' -no-deps' if !deps
       cmd += ' -no-remove' if !remove
       cmd += " #{name.quote} #{source.quote} #{dest.quote}"
-      cmd += " #{packages.join(' ')}" if !packages.empty?
+      if !packages.empty?
+        packages.each {|p| cmd += " #{p.quote}"}
+      end
 
       Aptly::runcmd cmd
+      Aptly::Snapshot.new name
     end
     private :pull
 
