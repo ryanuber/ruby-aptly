@@ -232,7 +232,7 @@ module Aptly
     #   When true, verify all source packages as well
     #
     # == Returns:
-    # True if verified, false if any deps are missing
+    # An array containing any missing deps. Empty list means all verified.
     #
     def verify kwargs={}
       sources = kwargs.arg :sources, []
@@ -244,7 +244,7 @@ module Aptly
       cmd += " #{sources.join(' ')}" if !sources.empty?
 
       out = Aptly::runcmd cmd
-      return out == 0
+      Aptly::parse_indented_list out
     end
 
     # Shortcut method to publish a snapshot from an Aptly::Snapshot instance.
