@@ -241,7 +241,7 @@ module Aptly
       cmd = 'aptly snapshot verify'
       cmd += ' -dep-follow-source' if follow_source
       cmd += " #{@name.quote}"
-      cmd += " #{@sources.join(' ')}" if !sources.empty?
+      cmd += " #{sources.join(' ')}" if !sources.empty?
 
       out = Aptly::runcmd cmd
       return out.lines.length == 0
