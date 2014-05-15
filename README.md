@@ -3,6 +3,9 @@ ruby-aptly
 
 Ruby wrapper for managing deb repos with [Aptly](http://aptly.info).
 
+This is currently a **work in progress**! `ruby-aptly` does not wrap 100% of the
+aptly feature set yet, but most major things are working at this point.
+
 ### Compatibility
 
 ruby-aptly is currently tested against Aptly 0.5. It is possible that it will
