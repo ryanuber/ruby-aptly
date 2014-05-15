@@ -128,17 +128,23 @@ module Aptly
     # == Parameters:
     # from_mirror::
     #   The name of the mirror to import from
-    # pkg_spec::
-    #   A debian pkg_spec string (e.g. "libc6 (>= 2.7-1)")
+    # packages::
+    #   A list of debian pkg_spec strings (e.g. "libc6 (>= 2.7-1)")
     # deps::
     #   When true, follows package dependencies and adds them
     #
-    def import from_mirror, pkg_spec, kwargs={}
+    def import from_mirror, kwargs={}
       deps = kwargs.arg :deps, false
+      packages = kwargs.arg :packages, []
+
+      if packages.length == 0
+        raise AptlyError.new '1 or more packages are required'
+      end
 
       cmd = 'aptly repo import'
       cmd += ' -with-deps' if deps
-      cmd += " #{from_mirror.quote} #{@name.quote} #{pkg_spec.quote}"
+      cmd += " #{from_mirror.quote} #{@name.quote}"
+      packages.each {|p| cmd += " #{p.quote}"}
 
       Aptly::runcmd cmd
     end

@@ -2,5 +2,6 @@ coverage
 spec/bin
 .aptly
 *.gem
+*.deb
 *.dsc
 *.gz

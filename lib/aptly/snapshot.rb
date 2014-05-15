@@ -14,8 +14,10 @@ module Aptly
   # == Returns:
   # An Aptly::Snapshot object
   #
-  def create_snapshot name, type, resource_name
-    if type != 'mirror' && type != 'repo'
+  def create_snapshot name, type, kwargs={}
+    resource_name = kwargs.arg :resource_name, ''
+
+    if type != 'mirror' && type != 'repo' && type != 'empty'
       raise AptlyError.new "Invalid snapshot type: #{type}"
     end
 
@@ -31,8 +33,13 @@ module Aptly
       raise AptlyError.new "Repo '#{resource_name}' does not exist"
     end
 
-    cmd = 'aptly snapshot create '
-    cmd += " #{name.quote} from #{type} #{resource_name.quote}"
+    cmd = 'aptly snapshot create'
+    cmd += " #{name.quote}"
+    if type == 'empty'
+      cmd += ' empty'
+    else
+      cmd += " from #{type} #{resource_name.quote}"
+    end
 
     runcmd cmd
     Snapshot.new name
@@ -41,12 +48,17 @@ module Aptly
 
   # Shortcut method to create a snapshot from a mirror
   def create_mirror_snapshot name, mirror_name
-    create_snapshot name, 'mirror', mirror_name
+    create_snapshot name, 'mirror', :resource_name => mirror_name
   end
 
   # Shortcut method to create a snapshot from a repo
   def create_repo_snapshot name, repo_name
-    create_snapshot name, 'repo', repo_name
+    create_snapshot name, 'repo', :resource_name => repo_name
+  end
+
+  # Shortcut method to create an empty snapshot
+  def create_empty_snapshot name
+    create_snapshot name, 'empty'
   end
 
   # List existing snapshots
@@ -198,9 +210,12 @@ module Aptly
       cmd += ' -no-deps' if !deps
       cmd += ' -no-remove' if !remove
       cmd += " #{name.quote} #{source.quote} #{dest.quote}"
-      cmd += " #{packages.join(' ')}" if !packages.empty?
+      if !packages.empty?
+        packages.each {|p| cmd += " #{p.quote}"}
+      end
 
       Aptly::runcmd cmd
+      Aptly::Snapshot.new dest
     end
     private :pull
 
@@ -210,7 +225,7 @@ module Aptly
       deps = kwargs.arg :deps, true
       remove = kwargs.arg :remove, true
 
-      pull @name, source, dest, :packages => pacakges, :deps => deps, :remove => remove
+      pull @name, source, dest, :packages => packages, :deps => deps, :remove => remove
     end
 
     # Shortcut method to push packages from the current snapshot
@@ -219,7 +234,7 @@ module Aptly
       deps = kwargs.arg :deps, true
       remove = kwargs.arg :remove, true
 
-      pull source, @name, dest, :packages => pacakges, :deps => deps, :remove => remove
+      pull source, @name, dest, :packages => packages, :deps => deps, :remove => remove
     end
 
     # Verifies an existing snapshot is able to resolve dependencies. This method
@@ -232,7 +247,7 @@ module Aptly
     #   When true, verify all source packages as well
     #
     # == Returns:
-    # True if verified, false if any deps are missing
+    # An array containing any missing deps. Empty list means all verified.
     #
     def verify kwargs={}
       sources = kwargs.arg :sources, []
@@ -241,10 +256,10 @@ module Aptly
       cmd = 'aptly snapshot verify'
       cmd += ' -dep-follow-source' if follow_source
       cmd += " #{@name.quote}"
-      cmd += " #{@sources.join(' ')}" if !sources.empty?
+      cmd += " #{sources.join(' ')}" if !sources.empty?
 
       out = Aptly::runcmd cmd
-      return out.lines.length == 0
+      Aptly::parse_indented_list out
     end
 
     # Shortcut method to publish a snapshot from an Aptly::Snapshot instance.
