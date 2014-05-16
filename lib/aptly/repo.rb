@@ -156,32 +156,36 @@ module Aptly
     #   The source repository name
     # to_repo::
     #   The destination repository name
-    # pkg_spec::
-    #   A debian pkg_spec string
+    # packages::
+    #   A list of debian pkg_spec strings
     # deps::
     #   When true, follow deps and copy them
     #
-    def copy from_repo, to_repo, pkg_spec, kwargs={}
+    def copy from_repo, to_repo, kwargs={}
       deps = kwargs.arg :deps, false
+      packages = kwargs.arg :packages, []
+
+      if packages.length == 0
+        raise AptlyError.new '1 or more packages are required'
+      end
 
       cmd = 'aptly repo copy'
       cmd += ' -with-deps' if deps
-      cmd += " #{from_repo.quote} #{to_repo.quote} #{pkg_spec.quote}"
+      cmd += " #{from_repo.quote} #{to_repo.quote}"
+      packages.each {|p| cmd += " #{p.quote}"}
 
       Aptly::runcmd cmd
     end
     private :copy
 
     # Shortcut method to copy resources in from another repository
-    def copy_from from_repo, pkg_spec, kwargs={}
-      deps = kwargs.arg :deps, false
-      copy from_repo, @name, pkg_spec, :deps => deps
+    def copy_from from_repo, kwargs={}
+      copy from_repo, @name, kwargs
     end
 
     # Shortcut method to copy resources out to another repository
-    def copy_to to_repo, pkg_spec, kwargs={}
-      deps = kwargs.arg :deps, false
-      copy @name, to_repo, pkg_spec, :deps => deps
+    def copy_to to_repo, kwargs={}
+      copy @name, to_repo, kwargs
     end
 
     # Move package resources from one repository to another
@@ -191,32 +195,36 @@ module Aptly
     #   The source repository name
     # to_repo::
     #   The destination repository name
-    # pkg_spec::
-    #   A debian pkg_spec string
+    # packages::
+    #   A list of debian pkg_spec strings
     # deps::
     #   When true, follow deps and move them too
     #
-    def move from_repo, to_repo, pkg_spec, kwargs={}
+    def move from_repo, to_repo, kwargs={}
       deps = kwargs.arg :deps, false
+      packages = kwargs.arg :packages, []
+
+      if packages.length == 0
+        raise AptlyError.new '1 or more packages are required'
+      end
 
       cmd = 'aptly repo move'
       cmd += ' -with-deps' if deps
-      cmd += " #{from_repo.quote} #{to_repo.quote} #{pkg_spec.quote}"
+      cmd += " #{from_repo.quote} #{to_repo.quote}"
+      packages.each {|p| cmd += " #{p.quote}"}
 
       Aptly::runcmd cmd
     end
     private :move
 
     # Shortcut method to move packages in from another repo
-    def move_from from_repo, pkg_spec, kwargs={}
-      deps = kwargs.arg :deps, false
-      move from_repo, @name, pkg_spec, :deps => deps
+    def move_from from_repo, kwargs={}
+      move from_repo, @name, kwargs
     end
 
     # Shortcut method to move packages out to another repository
-    def move_to to_repo, pkg_spec, kwargs={}
-      deps = kwargs.arg :deps, false
-      move @name, to_repo, pkg_spec, :deps => deps
+    def move_to to_repo, kwargs={}
+      move @name, to_repo, kwargs
     end
 
     # Remove packages selectively from a repository
