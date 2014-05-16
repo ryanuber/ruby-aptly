@@ -63,7 +63,7 @@ module Aptly
   describe "Importing Packages" do
     it "should import packages from a mirror" do
       repo = Aptly.create_repo 'repo3'
-      repo.import 'aptly', 'aptly_0.5_amd64'
+      repo.import 'aptly', :packages => ['aptly_0.5_amd64']
       repo.list_packages.should eq(['aptly_0.5_amd64'])
     end
   end
@@ -75,12 +75,12 @@ module Aptly
 
       # Copy to...
       repoA.add 'spec/pkgs/pkg1_1.0.1-1_amd64.deb'
-      repoA.copy_to repoB.name, 'pkg1_1.0.1-1_amd64'
+      repoA.copy_to repoB.name, :packages => ['pkg1_1.0.1-1_amd64']
       repoB.list_packages.should eq(['pkg1_1.0.1-1_amd64'])
 
       # Copy from...
       repoB.add 'spec/pkgs/pkg2_1.0.2-2_amd64.deb'
-      repoA.copy_from repoB.name, 'pkg2_1.0.2-2_amd64'
+      repoA.copy_from repoB.name, :packages => ['pkg2_1.0.2-2_amd64']
       repoA.list_packages.should eq(['pkg1_1.0.1-1_amd64', 'pkg2_1.0.2-2_amd64'])
     end
   end
@@ -92,12 +92,12 @@ module Aptly
 
       # Move to...
       repoA.add 'spec/pkgs/pkg1_1.0.1-1_amd64.deb'
-      repoA.move_to repoB.name, 'pkg1_1.0.1-1_amd64'
+      repoA.move_to repoB.name, :packages => ['pkg1_1.0.1-1_amd64']
       repoA.list_packages.should eq([])
       repoB.list_packages.should eq(['pkg1_1.0.1-1_amd64'])
 
       # Move from...
-      repoA.move_from repoB.name, 'pkg1_1.0.1-1_amd64'
+      repoA.move_from repoB.name, :packages => ['pkg1_1.0.1-1_amd64']
       repoA.list_packages.should eq(['pkg1_1.0.1-1_amd64'])
       repoB.list_packages.should eq([])
     end
