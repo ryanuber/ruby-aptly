@@ -127,7 +127,7 @@ module Aptly
     it "should publish an existing repo" do
       repo = Aptly.create_repo 'repo_to_publish'
       repo.add 'spec/pkgs/pkg1_1.0.1-1_amd64.deb'
-      repo.publish dist: 'repo_to_publish'
+      repo.publish :dist => 'repo_to_publish'
     end
   end
 
