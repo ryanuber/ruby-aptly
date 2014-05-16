@@ -1,5 +1,4 @@
-ruby-aptly
-==========
+# ruby-aptly [![Build Status](https://travis-ci.org/ryanuber/ruby-aptly.svg)](https://travis-ci.org/ryanuber/ruby-aptly)
 
 Ruby wrapper for managing deb repos with [Aptly](http://aptly.info).
 
