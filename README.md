@@ -29,3 +29,45 @@ with just a few lines of code. This library aims to make that process simple.
 
 API documentation available at
 [rubydoc.info](http://rubydoc.info/gems/aptly/frames)
+
+# Example
+
+```
+require 'rubygems'
+require 'aptly'
+
+# Creates a new mirror
+mirror = Aptly.create_mirror(
+    'precise',
+    'http://us.archive.ubuntu.com/ubuntu',
+    'precise',
+    :components => ['main', 'universe', 'multiverse']
+)
+
+# Performs a mirror update
+mirror.update
+
+# List packages in the mirror
+mirror.list_packages
+
+# Create a snapshot of a mirror
+snap1 = mirror.snapshot 'snap1'
+
+# Creates a new repo
+repo = Aptly.create_repo 'test_repo'
+
+# Import packages from a mirror into the repo
+repo.import mirror.name, :packages => ['linux-image', 'bash']
+
+# Create a snapshot from a repo
+snap2 = repo.snap 'snap2'
+
+# Merge two snapshots together, pulling in only latest packages
+merged = Aptly.merge_snapshots snap1, snap2, :latest => true
+
+# List packages in a merged snapshot
+merged.list_packages
+
+# Publish a snapshot
+merged.publish
+```
