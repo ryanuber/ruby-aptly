@@ -32,7 +32,7 @@ API documentation available at
 
 # Example
 
-```
+```ruby
 require 'rubygems'
 require 'aptly'
 
