@@ -90,8 +90,17 @@ module Aptly
     end
 
     # Drops an existing aptly repository
-    def drop
-      Aptly::runcmd "aptly repo drop #{@name.quote}"
+    #
+    # == Parameters:
+    # force::
+    #   When true, forces repo deletion
+    #
+    def drop kwargs={}
+      force = kwargs.arg :force, false
+      cmd = 'aptly repo drop'
+      cmd += ' -force' if force
+      cmd += " #{@name.quote}"
+      Aptly::runcmd cmd
     end
 
     # List all packages contained in a repository
