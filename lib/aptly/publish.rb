@@ -89,7 +89,7 @@ module Aptly
           next
         end
         dist = line.split.last
-        res[dist] = resource
+        res[resource['path']] = resource
       end
     end
     res
